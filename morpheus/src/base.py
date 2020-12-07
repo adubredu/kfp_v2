@@ -4,7 +4,7 @@ import numpy as np
 import time
 
 
-class base:
+class Base:
 	def __init__(self, client, base_id):
 		self.client = client 
 		self.id = base_id
@@ -29,15 +29,16 @@ class base:
 		p.setJointMotorControl2(self.id, self.left_wheel_id, p.VELOCITY_CONTROL, targetVelocity=left_vel, force=1000)
 		p.setJointMotorControl2(self.id, self.right_wheel_id, p.VELOCITY_CONTROL, targetVelocity=right_vel, force=1000)
 
-	def move_to_pose(self, pose, orientation):
+	def move_to_pose(self, pose, last=False):
+		orientation = pose[2]
 		self.state = "turn"
 		while not (self.state == "done"):
 			current_pose = p.getBasePositionAndOrientation(self.id, self.client)[0]
 			current_yaw = p.getEulerFromQuaternion(p.getBasePositionAndOrientation(self.id, self.client)[1])[2]
 			target_heading = np.arctan2(pose[1] - current_pose[1], pose[0]-current_pose[0])
 			error = self.angle_diff(target_heading, current_yaw)
-			if orientation is not None:
-				final_yaw_error = self.angle_diff(orientation[2], current_yaw)
+			if orientation > 0.01:
+				final_yaw_error = self.angle_diff(orientation, current_yaw)
 			angular_speed = 0.0; linear_speed = 0.0
 			if self.state == "turn":
 				if np.abs(error) > self.turn_tol:
@@ -55,9 +56,9 @@ class base:
 				linear_speed = self.max_linear_speed
 				dist_to_goal = np.linalg.norm(np.array(pose[:2])-np.array(current_pose[:2]))
 
-				if dist_to_goal < self.trans_tol:
+				if dist_to_goal < self.trans_tol:					
 					linear_speed = 0.0
-					if orientation is not None:
+					if orientation > 0.01:
 						self.state = "there"
 					else:
 						self.state = "done"
@@ -71,9 +72,19 @@ class base:
 						angular_speed = -self.max_angular_speed
 				else:
 					self.state = "done"
-			print('Current position: %.2f %.2f %.2f'%(current_pose[0],current_pose[1],current_yaw))
+			# print('Current position: %.2f %.2f %.2f'%(current_pose[0],current_pose[1],current_yaw))
+			if linear_speed == 0 and not last and not self.state == "turn":
+				linear_speed = self.max_linear_speed
+				print(self.state)
 			self.drive_base(linear_speed, angular_speed)
 		return True
+
+
+	def follow_path(self, path):
+		length = len(path)
+		for i,pose in enumerate(path):
+			self.move_to_pose(pose, last=(i==length-1))
+
 
 
 
@@ -85,14 +96,16 @@ if __name__ == '__main__':
 	p.setRealTimeSimulation(1)
 	p.setGravity(0, 0, -9.81)
 
-	p.setAdditionalSearchPath('/home/bill/kfp/kfp_v2/morpheus/models')
+	p.setAdditionalSearchPath('/home/bill/garage/kfp_v2/morpheus/models')
 	p.loadURDF('floor/floor.urdf')
 	base_id = p.loadURDF('fetch_description/robots/freight.urdf')
-	base = base(client, base_id)
-	base.move_to_pose([2.0,0.0,0],None)
-	base.move_to_pose([2.0,2.0,0],None)
-	base.move_to_pose([0.0,2.0,0],None)
-	base.move_to_pose([0.0,0.0,0],[0.0, 0.0, 0.0])
+	base = Base(client, base_id)
+	# base.move_to_pose([2.0,0.0,None])
+	# base.move_to_pose([2.0,2.0,None])
+	# base.move_to_pose([0.0,2.0,None])
+	# base.move_to_pose([0.0,0.0, 0.0])
+
+	base.follow_path([(-0.0036, 0.0, 0.0), (0.04594059405940594, 0.04950495049504951, 0.0), (0.09548118811881187, 0.09900990099009901, 0.0), (0.14502178217821782, 0.14851485148514854, 0.0)])
 	print('here')
 	time.sleep(100)
 
