@@ -2,6 +2,8 @@ import pybullet as p
 import pybullet_data
 import numpy as np
 import time
+from pybullet_planning.interfaces.env_manager.pose_transformation import base_values_from_pose, get_pose
+from pybullet_planning.interfaces.planner_interface.SE2_pose_motion_planning import plan_base_motion
 
 
 class Base:
@@ -12,7 +14,8 @@ class Base:
 		self.max_angular_speed = 2.5
 		self.max_linear_speed = 5.0
 		self.turn_tol = 0.005
-		self.trans_tol = 0.05
+		self.trans_tol = 0.3
+		self.final_trans_tol = 0.05
 		self.left_wheel_id = 0
 		self.right_wheel_id = 1
 		self.wheel_width = 0.5
@@ -22,6 +25,16 @@ class Base:
 		while diff < -np.pi: diff += 2.0*np.pi
 		while diff > np.pi: diff -= 2.0*np.pi
 		return diff 
+
+	def follow_path(self, path):
+		length = len(path)
+		for i,pose in enumerate(path):
+			self.move_to_pose(pose, last=(i==length-1))
+
+
+	def plan_and_drive_to_pose(self, goal_pose, limits,obstacles=[]):
+		path = plan_base_motion(self.id, goal_pose, limits,obstacles=obstacles)
+		self.follow_path(path)
 
 	def drive_base(self, linear_speed, angular_speed):
 		left_vel = linear_speed - angular_speed*(self.wheel_width*0.5)
@@ -40,6 +53,7 @@ class Base:
 			if orientation > 0.01:
 				final_yaw_error = self.angle_diff(orientation, current_yaw)
 			angular_speed = 0.0; linear_speed = 0.0
+
 			if self.state == "turn":
 				if np.abs(error) > self.turn_tol:
 					linear_speed = 0.0
@@ -50,18 +64,24 @@ class Base:
 						angular_speed = -self.max_angular_speed
 
 				else:
+					linear_speed = self.max_linear_speed
 					self.state = "drive"
 
 			elif self.state == "drive":
 				linear_speed = self.max_linear_speed
 				dist_to_goal = np.linalg.norm(np.array(pose[:2])-np.array(current_pose[:2]))
 
+				tol = self.trans_tol
+				if last: tol = self.final_trans_tol
+				
 				if dist_to_goal < self.trans_tol:					
 					linear_speed = 0.0
 					if orientation > 0.01:
 						self.state = "there"
 					else:
 						self.state = "done"
+						if not last:
+							linear_speed=self.max_linear_speed
 
 			elif self.state == "there":
 				if np.abs(final_yaw_error) > self.turn_tol:
@@ -73,17 +93,12 @@ class Base:
 				else:
 					self.state = "done"
 			# print('Current position: %.2f %.2f %.2f'%(current_pose[0],current_pose[1],current_yaw))
-			if linear_speed == 0 and not last and not self.state == "turn":
-				linear_speed = self.max_linear_speed
-				print(self.state)
 			self.drive_base(linear_speed, angular_speed)
 		return True
 
 
-	def follow_path(self, path):
-		length = len(path)
-		for i,pose in enumerate(path):
-			self.move_to_pose(pose, last=(i==length-1))
+
+
 
 
 
