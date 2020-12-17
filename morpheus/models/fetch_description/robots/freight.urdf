@@ -76,7 +76,8 @@
     <parent link="base_link" />
     <child link="l_wheel_link" />
     <axis xyz="0 1 0" />
-  <limit effort="8.85" velocity="34.8" /></joint>
+  <limit effort="8.85" velocity="34.8" />
+</joint>
   <link name="estop_link">
     <inertial>
       <origin rpy="0 0 0" xyz="0.002434512737072 -0.00330608315239905 0.00665139196650039" />
@@ -145,4 +146,61 @@
     <parent link="base_camera_link" />
     <child link="base_camera_optical_frame" />
   </joint>
+  <link name="pedestal">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.0036 0.0 0.0014" />
+      <mass value="7.1294" />
+      <inertia ixx="1.225" ixy="0.0099" ixz="0.0062" iyy="1.2853" iyz="-0.0034" izz="0.987" />
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0" />
+      <geometry>
+        <box size="0.25 0.25 0.6" />
+      </geometry>
+      <material name="five">
+        <color rgba="0.5 0.5 0.5 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0" />
+      <geometry>
+        <box size="0.3 0.3 1.0" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_to_pedestal" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0.6" />
+    <parent link="base_link"/>
+    <child link="pedestal"/>
+  </joint>
+  <link name="lift">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.0036 0.0 0.0014" />
+      <mass value="7.1294" />
+      <inertia ixx="1.225" ixy="0.0099" ixz="0.0062" iyy="1.2853" iyz="-0.0034" izz="0.987" />
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0" />
+      <geometry>
+        <box size="0.2 0.2 0.4" />
+      </geometry>
+      <material name="six">
+        <color rgba="0.8 0.8 0.8 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0" />
+      <geometry>
+        <box size="0.2 0.2 0.4" />
+      </geometry>
+    </collision>
+    </link>
+  <joint name="pedestal_to_lift" type="prismatic">
+    <parent link="pedestal"/>
+    <child link="lift"/>
+    <origin rpy="0 0 0" xyz="0 0 0.2"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0.0" upper="0.3" effort="30000" velocity="1000"/>
+  </joint>
+  
 </robot>

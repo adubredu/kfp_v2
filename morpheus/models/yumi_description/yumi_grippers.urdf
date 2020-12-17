@@ -45,7 +45,7 @@
   <link name="yumi_body">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="15"/>
+      <mass value="5"/>
       <inertia ixx="0.5" ixy="0" ixz="0" iyy="0.6" iyz="0" izz="0.3"/>
     </inertial>
     <visual>
@@ -789,7 +789,7 @@
     </actuator>
   </transmission>
   <!-- Table top -->
-  <joint name="yumi_body_to_table_top" type="fixed">
+  <!-- <joint name="yumi_body_to_table_top" type="fixed">
     <parent link="yumi_body"/>
     <child link="table_top"/>
     <origin rpy="0 0 1.57079" xyz="0.110910 0 0.0"/>
@@ -802,7 +802,7 @@
       </geometry>
       <material name="Grey"/>
     </visual>
-  </link>
+  </link> -->
   <!-- Table base -->
   <!-- <joint name="yumi_body_to_table_base" type="fixed">
     <parent link="yumi_body"/>
