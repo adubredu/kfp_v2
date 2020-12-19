@@ -469,6 +469,10 @@
       </geometry>
     </collision>
   </link>
+
+  <!-- ATTACH HOVERBOARD HERE -->
+
+  
   <link name="right_shoulder_roll">
     <inertial>
       <origin rpy="0 0 0" xyz="9e-06 0.003158 0.023405"/>

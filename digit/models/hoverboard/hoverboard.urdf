@@ -1,0 +1,155 @@
+<robot name="hoverboard">
+  <link name="base">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="15.028392"/>
+      <inertia ixx="0.0045" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.0045" />
+    </inertial>
+    <visual>
+    	<origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/base.obj" scale="0.05 0.05 0.05"/>
+        <!-- <box size="0.2 1.0 0.3"/> -->
+      </geometry>
+      <material name="scarlet">
+        <color rgba="0.89 0.13 0.0 1"/>
+      </material>
+    </visual>
+    <collision>
+    	<origin rpy="1.57  0 1.57 " xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/base.obj" scale="0.05 0.05 0.05"/>
+        <!-- <box size="0.2 1.0 0.3"/> -->
+      </geometry>
+    </collision>
+</link>
+
+<link name="right_wheel">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="4.028392"/>
+      <inertia ixx="0.0045" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.0045" />
+    </inertial>
+    <visual>
+    	<origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/wheel.stl" scale="0.05 0.05 0.05"/>
+         <!-- <cylinder radius="0.2" length="0.1"/> -->
+      </geometry>
+      <material name="black">
+        <color rgba="0.2 0.2 0.2 1"/>
+      </material>
+    </visual>
+    <collision>
+    	<origin rpy="1.57  0 1.57 " xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/wheel.stl" scale="0.05 0.05 0.05"/>
+        <!-- <cylinder radius="0.2" length="0.1"/> -->
+      </geometry>
+    </collision>
+</link>
+
+<joint name="wheelr_to_base" type="continuous">
+	<origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <parent link="base"/>
+    <child link="right_wheel"/>
+    <limit effort="8.85" velocity="34.8" />
+</joint>
+
+<link name="left_wheel">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="4.028392"/>
+      <inertia ixx="0.0045" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.0045" />
+    </inertial>
+    <visual>
+    	<origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/wheel.stl" scale="0.05 0.05 0.05"/>
+         <!-- <cylinder radius="0.2" length="0.1"/> -->
+      </geometry>
+      <material name="black">
+        <color rgba="0.2 0.2 0.2 1"/>
+      </material>
+    </visual>
+    <collision>
+    	<origin rpy="1.57  0 1.57 " xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/wheel.stl" scale="0.05 0.05 0.05"/>
+        <!-- <cylinder radius="0.2" length="0.1"/> -->
+      </geometry>
+    </collision>
+</link>
+
+<joint name="wheell_to_base" type="continuous">
+	<origin rpy="0 0 0" xyz="0 1.0 0"/>
+    <axis xyz="0 1 0"/>
+    <parent link="base"/>
+    <child link="left_wheel"/>
+    <limit effort="8.85" velocity="34.8" />
+</joint>
+
+<link name="balance">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="14.028392"/>
+      <inertia ixx="0.0045" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.0045" />
+    </inertial>
+    <visual>
+    	<origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.5 0.05 0.05"/>
+      </geometry>
+      <material name="scarlet">
+      </material>
+    </visual>
+    <collision>
+    	<origin rpy="0 0 0 " xyz="0 0 0"/>
+      <geometry>
+        <box size="0.5 0.05 0.05"/>
+      </geometry>
+    </collision>
+</link>
+
+<joint name="balance_to_base" type="fixed">
+	<origin rpy="0 0 0" xyz="-0.25 0.5 0"/>
+	    <!-- <axis xyz="1 1 1"/> -->
+    <parent link="base"/>
+    <child link="balance"/>
+</joint>
+
+<link name="third_wheel">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="4.028392"/>
+      <inertia ixx="0.0045" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.0045" />
+    </inertial>
+    <visual>
+    	<origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/wheel.stl" scale="0.05 0.05 0.05"/> -->
+         <sphere radius="0.15"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0.2 0.2 0.2 1"/>
+      </material>
+    </visual>
+    <collision>
+    	<origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/wheel.stl" scale="0.05 0.05 0.05"/> -->
+        <sphere radius="0.15"/>
+      </geometry>
+    </collision>
+</link>
+
+<joint name="twheel_to_balance" type="fixed">
+	<origin rpy="0 0 0" xyz="-0.25 0.0 0"/>
+    <axis xyz="0 1 0"/>
+    <parent link="balance"/>
+    <child link="third_wheel"/>
+    <!-- <limit effort="8.85" velocity="34.8" /> -->
+    <!-- <limit effort="1.4" lower="-1.0472" upper="1.0472" velocity="12.15"/> -->
+</joint>
+</robot>

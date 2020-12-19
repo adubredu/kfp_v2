@@ -15,7 +15,8 @@ p.loadURDF('floor/floor.urdf')
 
 # yumi = p.loadURDF('yumi_description/yumi_grippers.urdf', [1,1,0])
 base = p.loadURDF('morpheus_description/morpheus.urdf')
-joint_pos = p.calculateInverseKinematics(base, 13,[0.5,0.1,0.7] )
+# base = p.loadURDF('hoverboard/hoverboard.urdf')
+# joint_pos = p.calculateInverseKinematics(base, 13,[0.5,0.1,0.7] )
 
 # print(len(joint_pos))
 # print(p.getNumJoints(base))
@@ -34,7 +35,7 @@ for i in range(p.getNumJoints(base)):
 # lift_index=7
 # cid = p.createConstraint(base, lift_index, yumi, -1, p.JOINT_FIXED, [0, 0, 1], [0, 0, 0], [0., 0., 0])
 
-time.sleep(5)
+time.sleep(500)
 def control_joint(joint, value, minn, maxx):
 	global base
 	if value < minn:

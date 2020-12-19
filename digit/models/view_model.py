@@ -15,7 +15,7 @@ p.setAdditionalSearchPath('.')
 p.loadURDF('floor/floor.urdf')
 
 # yumi = p.loadURDF('yumi_description/yumi_grippers.urdf', [1,1,0])
-base = p.loadURDF('digit_description/digit.urdf',[0,0,0.9], useFixedBase=True)
+base = p.loadURDF('not_digit/not_digit.urdf',[0,0,0.9], useFixedBase=True)
 # joint_pos = p.calculateInverseKinematics(base, 13,[0.5,0.1,0.7] )
 
 right_arm_joints = [8,9,10,11,12,13]
@@ -36,7 +36,7 @@ for i in range(p.getNumJoints(base)):
 # lift_index=7
 # cid = p.createConstraint(base, lift_index, yumi, -1, p.JOINT_FIXED, [0, 0, 1], [0, 0, 0], [0., 0., 0])
 
-# time.sleep(500)
+time.sleep(500)
 def control_joint(joint, value, minn, maxx):
     global base
     minn, maxx = get_joint_limits(base, joint)
