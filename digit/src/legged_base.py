@@ -14,7 +14,7 @@ import time
 import pybullet_data
 from pybullet_utils import bullet_client
 import pybullet 
-from pybullet_planning import plan_base_motion
+from pybullet_planning import plan_base_motion, plan_joint_motion
 
 from mpc_controller import com_velocity_estimator
 from mpc_controller import gait_generator as gait_generator_lib
@@ -35,6 +35,7 @@ class Base:
                   time_step=0.002,
                   action_repeat=1)
         self.id = self.robot.quadruped
+        self.p = p
         self.client = 0
         self.state = "turn"
         self.max_angular_speed = 0.25
@@ -43,7 +44,17 @@ class Base:
         self.trans_tol = 0.3
         self.final_trans_tol = 0.05
         self.wheel_width = 0.2
+        self.left_ee = 9
+        self.right_ee = 17
+        self.arm_ee={'left_arm': self.left_ee, 'right_arm': self.right_ee}
+        self.arm_ranges={'left_arm':(0,6), 'right_arm':(8,14)}
 
+        self.arm_joints = [2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18]
+        self.left_arm_joints = [2,3,4,5,6,7]
+        self.right_arm_joints = [10,11,12,13,14,15]
+        self.arm_joints_dict = {'left_arm':self.left_arm_joints, 'right_arm':self.right_arm_joints}
+        self.lowerLimits, self.upperLimits, self.jointRanges, self.restPoses = self.getJointRanges()
+        # self.brace_arms()
         self.controller = self._setup_controller(self.robot)
         self.controller.reset()
 
@@ -106,6 +117,13 @@ class Base:
         self.controller.stance_leg_controller.desired_twisting_speed = ang_speed
 
 
+    def brace_arms(self):
+        for joint in self.left_arm_joints+self.right_arm_joints:
+            p.setJointMotorControl2(self.id, joint,
+                controlMode=p.POSITION_CONTROL,targetPosition=0.0,
+                force=3000)
+
+
     def angle_diff(self, angle1, angle2):
         diff = angle2 - angle1
         while diff < -np.pi: diff += 2.0*np.pi
@@ -117,25 +135,23 @@ class Base:
         length = len(path)
         for i,pose in enumerate(path):
             self.move_to_pose(pose, last=(i==length-1))
+        print('at goal pose')
 
 
     def plan_and_drive_to_pose(self, goal_pose, limits,obstacles=[]):
         path = plan_base_motion(self.id, goal_pose, limits,obstacles=obstacles)
         self.follow_path(path)
 
-    ###
+    
     def drive_base(self, linear_speed, angular_speed):
-        # print('lin ang: ',linear_speed, angular_speed)
+        self.brace_arms()
         self._update_controller_params(linear_speed, angular_speed)
         self.controller.update()
         hybrid_action,_ = self.controller.get_action()
-        # print(hybrid_action)
         self.robot.Step(hybrid_action)
-        # time.sleep(0.3)
 
 
     def move_to_pose(self, pose, last=False):
-        print('moving to: ',pose)
         orientation = pose[2]
         self.state = "turn"
         while not (self.state == "done"):
@@ -143,7 +159,6 @@ class Base:
             current_yaw = self.robot.GetTrueBaseRollPitchYaw()[2]
             target_heading = np.arctan2(pose[1] - current_pose[1], pose[0]-current_pose[0])
             error = self.angle_diff(target_heading, current_yaw)
-            print('error: ',error)
             if orientation > 0.01:
                 final_yaw_error = self.angle_diff(orientation, current_yaw)
             angular_speed = 0.0; linear_speed = 0.0
@@ -190,6 +205,66 @@ class Base:
             self.drive_base(lspeed, angular_speed)
         return True
 
+
+    def getJointRanges(self, includeFixed=False):
+        lowerLimits, upperLimits, jointRanges, restPoses = [], [], [], []
+
+        numJoints = p.getNumJoints(self.id)
+
+        for i in range(numJoints):
+            jointInfo = p.getJointInfo(self.id, i)
+
+            if includeFixed or jointInfo[3] > -1:
+
+                ll, ul = jointInfo[8:10]
+                jr = ul - ll
+                rp = p.getJointState(self.id, i)[0]
+
+                lowerLimits.append(-2)
+                upperLimits.append(2)
+                jointRanges.append(2)
+                restPoses.append(rp)
+
+        return lowerLimits, upperLimits, jointRanges, restPoses
+
+
+    def solve_ik(self, targetPosition, targetOrientation, ee_id, useNullSpace=True):
+        if useNullSpace:
+            jointPoses = p.calculateInverseKinematics(self.id, ee_id, targetPosition, targetOrientation, lowerLimits=self.lowerLimits, upperLimits=self.upperLimits, jointRanges=self.jointRanges,restPoses=self.restPoses)
+        else:
+            jointPoses = p.calculateInverseKinematics(self.id, ee_id, targetPosition, targetOrientation)
+        return jointPoses
+
+
+    def set_joint_motors(self, jointPoses):
+        numJoints = p.getNumJoints(self.id)
+        for i in range(numJoints):
+            jointInfo = p.getJointInfo(self.id, i)
+            qIndex = jointInfo[3]
+            if qIndex > -1:
+                p.setJointMotorControl2(bodyIndex=self.id, jointIndex=i, controlMode=p.POSITION_CONTROL, targetPosition=jointPoses[qIndex-7],targetVelocity=0, force=500, positionGain=0.03, velocityGain=1 )
+
+
+    def move_arm_to_pose_ik(self, position, orientation, arm_name):
+        ee_id = self.arm_ee[arm_name]
+        joint_configs = self.solve_ik(position, orientation, ee_id)
+        self.set_joint_motors(joint_configs)
+
+
+    def plan_and_execute_arm_in_jointspace(self, position, orientation, arm_name):
+        arm_joints = self.arm_joints_dict[arm_name]
+        ee_id = self.arm_ee[arm_name]
+        goal_joints = self.solve_ik(position, orientation, ee_id)
+        arm_goal_joints = goal_joints[self.arm_ranges[arm_name][0]:self.arm_ranges[arm_name][1]]
+        self.brace_arms()
+        print('braced')
+        time.sleep(4)
+        path = plan_joint_motion(self.id, arm_joints, arm_goal_joints)
+        print(path)
+
+
+
+
 if __name__ == '__main__':
     # client = pybullet.connect(pybullet.GUI);print(client)
     
@@ -200,11 +275,21 @@ if __name__ == '__main__':
     p.setPhysicsEngineParameter(enableConeFriction=0)
     p.setAdditionalSearchPath('../models')
     p.loadURDF('floor/floor.urdf')
-    p.setAdditionalSearchPath(pybullet_data.getDataPath())
+    # p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
     base = Base(p)
-    base.plan_and_drive_to_pose([5,5,0.0],[100,100])
-    time.sleep(10)
+    # for i in range(p.getNumJoints(base.id)):
+    #     print('')
+    #     print(p.getJointInfo(base.id, i))
+    # not_digit = p.loadURDF('not_digit/nl_digit.urdf',[0,0,0.4])
+
+    # cid = p.createConstraint(base.id, -1, not_digit, 0, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [0., 0., 0], p.getQuaternionFromEuler([0, 1.5707, 0]))
+    time.sleep(5)
+    # base.plan_and_drive_to_pose([5,5,0.0],[100,100])
+
+    position = (0.495,-0.032,0.311); orientation=(0,0,0,1)
+    base.plan_and_execute_arm_in_jointspace(position,orientation,'right_arm')
+    time.sleep(100)
 
 
 

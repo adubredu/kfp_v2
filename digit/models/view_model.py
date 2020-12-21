@@ -15,7 +15,7 @@ p.setAdditionalSearchPath('.')
 p.loadURDF('floor/floor.urdf')
 
 # yumi = p.loadURDF('yumi_description/yumi_grippers.urdf', [1,1,0])
-base = p.loadURDF('not_digit/not_digit.urdf',[0,0,0.9], useFixedBase=True)
+base = p.loadURDF('not_digit/nl_digit.urdf',[0,0,0.9], useFixedBase=True)
 # joint_pos = p.calculateInverseKinematics(base, 13,[0.5,0.1,0.7] )
 
 right_arm_joints = [8,9,10,11,12,13]
