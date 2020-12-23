@@ -177,6 +177,7 @@ if __name__ == "__main__":
 
       jointPoses = accurateIK(baxterId, endEffectorId, targetPosition, lowerLimits, upperLimits, jointRanges, restPoses, useNullSpace=useNullSpace)
       setMotors(baxterId, jointPoses)
+      print('final pose: ',p.getLinkState(baxterId, endEffectorId)[0])
 
       #sleep(0.1)
 

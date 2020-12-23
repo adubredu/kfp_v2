@@ -14,7 +14,8 @@ import time
 import pybullet_data
 from pybullet_utils import bullet_client
 import pybullet 
-from pybullet_planning import plan_base_motion, plan_joint_motion
+from pybullet_planning import plan_base_motion, plan_joint_motion, set_joint_positions, get_movable_joints, get_max_limits, get_min_limits,set_pose, get_pose, Pose, Point, stable_z
+import pybullet_planning as ut
 
 from mpc_controller import com_velocity_estimator
 from mpc_controller import gait_generator as gait_generator_lib
@@ -53,6 +54,7 @@ class Base:
         self.left_arm_joints = [2,3,4,5,6,7]
         self.right_arm_joints = [10,11,12,13,14,15]
         self.arm_joints_dict = {'left_arm':self.left_arm_joints, 'right_arm':self.right_arm_joints}
+        self.gripper_joints = {'left_arm':(8,9), 'right_arm':(16,17)}
         self.lowerLimits, self.upperLimits, self.jointRanges, self.restPoses = self.getJointRanges()
         # self.brace_arms()
         self.controller = self._setup_controller(self.robot)
@@ -207,7 +209,11 @@ class Base:
 
 
     def getJointRanges(self, includeFixed=False):
-        lowerLimits, upperLimits, jointRanges, restPoses = [], [], [], []
+        all_joints = get_movable_joints(self.id)
+        upper_limits = get_max_limits(self.id, all_joints)
+        lower_limits = get_min_limits(self.id, all_joints)
+
+        jointRanges, restPoses = [], []
 
         numJoints = p.getNumJoints(self.id)
 
@@ -215,40 +221,64 @@ class Base:
             jointInfo = p.getJointInfo(self.id, i)
 
             if includeFixed or jointInfo[3] > -1:
-
-                ll, ul = jointInfo[8:10]
-                jr = ul - ll
                 rp = p.getJointState(self.id, i)[0]
-
-                lowerLimits.append(-2)
-                upperLimits.append(2)
                 jointRanges.append(2)
                 restPoses.append(rp)
 
-        return lowerLimits, upperLimits, jointRanges, restPoses
+        return lower_limits, upper_limits, jointRanges, restPoses
 
 
     def solve_ik(self, targetPosition, targetOrientation, ee_id, useNullSpace=True):
         if useNullSpace:
-            jointPoses = p.calculateInverseKinematics(self.id, ee_id, targetPosition, targetOrientation, lowerLimits=self.lowerLimits, upperLimits=self.upperLimits, jointRanges=self.jointRanges,restPoses=self.restPoses)
+            jointPoses = p.calculateInverseKinematics(self.id, ee_id, targetPosition, targetOrientation,
+                lowerLimits=self.lowerLimits, upperLimits=self.upperLimits, jointRanges=self.jointRanges, maxNumIterations=100000,residualThreshold=0.001, restPoses=self.restPoses)
         else:
-            jointPoses = p.calculateInverseKinematics(self.id, ee_id, targetPosition, targetOrientation)
+            jointPoses = p.calculateInverseKinematics(self.id, ee_id, targetPosition)
         return jointPoses
+
+    def control_joint(self, joint, value):
+        p.setJointMotorControl2(self.id, joint,
+                    controlMode=p.POSITION_CONTROL,targetPosition=value,targetVelocity=10,force=3000)
+        # for i in range(10):
+        p.stepSimulation()
+
+    def open_gripper(self, arm_name):
+        j = self.gripper_joints[arm_name]
+        self.control_joint(j[0], 0.025)
+        self.control_joint(j[1], 0.025)
+        print('gripper open')
+
+
+    def close_gripper(self, arm_name):
+        j = self.gripper_joints[arm_name]
+        self.control_joint(j[0], 0.0)
+        self.control_joint(j[1], 0.0) 
+        print('gripper closed')
 
 
     def set_joint_motors(self, jointPoses):
         numJoints = p.getNumJoints(self.id)
+        # for i in range(100):
         for i in range(numJoints):
             jointInfo = p.getJointInfo(self.id, i)
             qIndex = jointInfo[3]
             if qIndex > -1:
                 p.setJointMotorControl2(bodyIndex=self.id, jointIndex=i, controlMode=p.POSITION_CONTROL, targetPosition=jointPoses[qIndex-7],targetVelocity=0, force=500, positionGain=0.03, velocityGain=1 )
-
+                p.stepSimulation()
+                # print('i')
 
     def move_arm_to_pose_ik(self, position, orientation, arm_name):
         ee_id = self.arm_ee[arm_name]
-        joint_configs = self.solve_ik(position, orientation, ee_id)
-        self.set_joint_motors(joint_configs)
+        for i in range(20):
+            joint_configs = self.solve_ik(position, orientation, ee_id)
+            self.set_joint_motors(joint_configs)
+
+        # js = joint_configs[self.arm_ranges[arm_name][0]:self.arm_ranges[arm_name][1]]
+        # set_joint_positions(self.id, self.arm_joints_dict[arm_name], js)
+        # print(joint_configs)
+        # print('there')
+        print('final pose: ',p.getLinkState(self.id, ee_id)[0])
+        print('final orientation: ',p.getEulerFromQuaternion(p.getLinkState(self.id, ee_id)[1]))
 
 
     def plan_and_execute_arm_in_jointspace(self, position, orientation, arm_name):
@@ -274,9 +304,26 @@ if __name__ == '__main__':
     p.setGravity(0, 0, -9.81)
     p.setPhysicsEngineParameter(enableConeFriction=0)
     p.setAdditionalSearchPath('../models')
-    p.loadURDF('floor/floor.urdf')
+    # p.loadURDF('floor/floor.urdf')
     # p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
+    kitchen_path = 'kitchen_description/urdf/kitchen_part_right_gen_convex.urdf'
+    with ut.HideOutput(enable=True):
+        floor = p.loadURDF('floor/floor.urdf',useFixedBase=True)
+        kitchen = p.loadURDF(kitchen_path,[-5,0,1.477],useFixedBase=True)
+
+    # z = ut.stable_z(kitchen, floor) - ut.get_point(floor)[2]
+    # point = np.array(ut.get_point(kitchen)) - np.array([0, 0, z])
+    # ut.set_point(floor, point)
+
+
+    table1 = p.loadURDF('table/table.urdf',[1.0,0,0], p.getQuaternionFromEuler([0,0,1.57]), useFixedBase=False)
+    table2 = p.loadURDF('table/table.urdf',[-1.0,-2.0,0], useFixedBase=False)
+    pepsi = p.loadSDF('can_pepsi/model.sdf')
+    pepsi = pepsi[0]
+    # block = p.loadURDF('block/block.urdf')
+    set_pose(pepsi, Pose(Point(x=0.7, y=-0.3, z=stable_z(pepsi, table1))))
+    block_pose = get_pose(pepsi)
     base = Base(p)
     # for i in range(p.getNumJoints(base.id)):
     #     print('')
@@ -285,11 +332,15 @@ if __name__ == '__main__':
 
     # cid = p.createConstraint(base.id, -1, not_digit, 0, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [0., 0., 0], p.getQuaternionFromEuler([0, 1.5707, 0]))
     time.sleep(5)
-    # base.plan_and_drive_to_pose([5,5,0.0],[100,100])
+    # base.plan_and_drive_to_pose([-4,4,0.0],[100,100])
+    time.sleep(2)
+    base.plan_and_drive_to_pose([-4,0,0.0],[100,100])
+    position = [0.6,0.2,0.8]; orientation=p.getQuaternionFromEuler((0,1,0))
+    time.sleep(3); print(block_pose[0],(0,1,0))
+    # base.move_arm_to_pose_ik(block_pose[0],orientation,'right_arm')
+    # base.close_gripper('right_arm')
+    time.sleep(200)
 
-    position = (0.495,-0.032,0.311); orientation=(0,0,0,1)
-    base.plan_and_execute_arm_in_jointspace(position,orientation,'right_arm')
-    time.sleep(100)
 
 
 

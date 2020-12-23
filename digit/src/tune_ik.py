@@ -26,7 +26,7 @@ def setUpWorld(initialSimSteps=100):
     sleep(0.1)
     p.configureDebugVisualizer(p.COV_ENABLE_RENDERING,0)
     # Load Baxter
-    morpheusId = p.loadURDF("a1/a1.urdf",useFixedBase=True)
+    morpheusId = p.loadURDF("a1/a1.urdf",[0.0,0.0,0.4],useFixedBase=True)
     # p.resetBasePositionAndOrientation(baxterId, [0.5, -0.8, 0.0], [0., 0., -1., -1.])
     #p.resetBasePositionAndOrientation(baxterId, [0.5, -0.8, 0.0],[0,0,0,1])
     #p.resetBasePositionAndOrientation(baxterId, [0, 0, 0], )
@@ -34,7 +34,7 @@ def setUpWorld(initialSimSteps=100):
     p.configureDebugVisualizer(p.COV_ENABLE_RENDERING,1)
 
     # Grab relevant joint IDs
-    endEffectorId = 15 # (left gripper left finger)
+    endEffectorId = 9 # (left gripper left finger)
 
     # Set gravity
     p.setGravity(0., 0., -10.)
@@ -174,13 +174,14 @@ if __name__ == "__main__":
       
       useNullSpace = nullSpace>0.5
       # print("useNullSpace=",useNullSpace)
-      joint_angles = [x[0] for x in p.getJointStates(baxterId, get_movable_joints(baxterId))]
-      print(len(joint_angles))
+      # joint_angles = [x[0] for x in p.getJointStates(baxterId, get_movable_joints(baxterId))]
+      # print(len(joint_angles))
 
       jointPoses = accurateIK(baxterId, endEffectorId, targetPosition, lowerLimits, upperLimits, jointRanges, restPoses, useNullSpace=useNullSpace)
 
       # print('num joints',len(jointPoses))
       setMotors(baxterId, jointPoses)
+      print('final pose: ',p.getLinkState(baxterId, endEffectorId)[0])
 
       #sleep(0.1)
 

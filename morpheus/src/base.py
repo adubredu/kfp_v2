@@ -13,11 +13,11 @@ class Base:
 		self.state = "turn"
 		self.max_angular_speed = 2.5
 		self.max_linear_speed = 5.0
-		self.turn_tol = 0.005
+		self.turn_tol = 0.05
 		self.trans_tol = 0.3
 		self.final_trans_tol = 0.05
-		self.left_wheel_id = 0
-		self.right_wheel_id = 1
+		self.left_wheel_id = 37
+		self.right_wheel_id = 38
 		self.wheel_width = 0.5
 
 	def angle_diff(self, angle1, angle2):
@@ -111,16 +111,18 @@ if __name__ == '__main__':
 	p.setRealTimeSimulation(1)
 	p.setGravity(0, 0, -9.81)
 
-	p.setAdditionalSearchPath('/home/bill/garage/kfp_v2/morpheus/models')
-	p.loadURDF('floor/floor.urdf')
-	base_id = p.loadURDF('fetch_description/robots/freight.urdf')
+	p.setAdditionalSearchPath('/home/bill/garage/kfp_v2/')
+	p.loadURDF('morpheus/models/floor/floor.urdf')
+	# base_id = p.loadURDF('morpheus/models/fetch_description/robots/freight.urdf')
+
+	base_id = p.loadURDF('digit/models/buff_digit/buff_digit.urdf')
 	base = Base(client, base_id)
 	# base.move_to_pose([2.0,0.0,None])
 	# base.move_to_pose([2.0,2.0,None])
 	# base.move_to_pose([0.0,2.0,None])
 	# base.move_to_pose([0.0,0.0, 0.0])
 
-	base.follow_path([(-0.0036, 0.0, 0.0), (0.04594059405940594, 0.04950495049504951, 0.0), (0.09548118811881187, 0.09900990099009901, 0.0), (0.14502178217821782, 0.14851485148514854, 0.0)])
+	base.plan_and_drive_to_pose([5.0,5.0,0.0],[100,100])
 	print('here')
 	time.sleep(100)
 
