@@ -1,6 +1,6 @@
 import pybullet as p 
 import pybullet_data
-from pybullet_planning import get_joint_limits, multiply, get_link_pose,invert
+from pybullet_planning import get_joint_limits, multiply, get_link_pose,invert,get_movable_joints
 from trac_ik_python.trac_ik import IK
 
 import time
@@ -16,25 +16,13 @@ p.loadURDF('floor/floor.urdf')
 
 # yumi = p.loadURDF('yumi_description/yumi_grippers.urdf', [1,1,0])
 # base = p.loadURDF('buff_digit/panda_arm_hand.urdf',[0,0,0], useFixedBase=True)
-base = p.loadURDF('buff_digit/panda.urdf',[0,0,0], useFixedBase=True)
+base = p.loadURDF('buff_digit/digit.urdf',[0,0,0], useFixedBase=True)
 
-right_arm_joints = [8,9,10,11,12,13]
-# print(len(joint_pos))
-# print(p.getNumJoints(base))
+
 for i in range(p.getNumJoints(base)):
     print('')
     print(p.getJointInfo(base, i))
-#     # qIndex = j[3]
-    # if qIndex > -1:
-    #     print(j)
-	# p.setJointMotorControl2(base, i,
-				# controlMode=p.POSITION_CONTROL,targetPosition=joint_pos[i],
-				# force=3000)
 
-# yumi = p.loadURDF('yumi_description/yumi_grippers.urdf', [0.2,0,1])
-
-# lift_index=7
-# cid = p.createConstraint(base, lift_index, yumi, -1, p.JOINT_FIXED, [0, 0, 1], [0, 0, 0], [0., 0., 0])
 
 time.sleep(3)
 def control_joint(joint, value, minn, maxx):
@@ -74,22 +62,22 @@ def set_joint_motors(base, jointPoses):
         jointInfo = p.getJointInfo(base, i)
         qIndex = jointInfo[3]
         if qIndex > -1:
-            p.setJointMotorControl2(bodyIndex=base, jointIndex=i, controlMode=p.POSITION_CONTROL, targetPosition=jointPoses[qIndex-7],targetVelocity=0, force=500, positionGain=0.03, velocityGain=1 )
+            p.setJointMotorControl2(bodyIndex=base, jointIndex=i, controlMode=p.POSITION_CONTROL, targetPosition=jointPoses[qIndex-7],targetVelocity=0, force=500, positionGain=0.03, velocityGain=0.5 )
             p.stepSimulation()
 
 def solve_ik(urdf_path, pose):
     urdfstring = ''.join(open(urdf_path,'r').readlines())
-    # ik = IK('torso', 'left_gripper_ee',urdf_string=urdfstring)
-    ik = IK('panda_link0', 'panda_hand',urdf_string=urdfstring)
+    ik = IK('torso', 'left_gripper_ee',urdf_string=urdfstring)
+    # ik = IK('panda_link0', 'panda_hand',urdf_string=urdfstring)
 
-    init_joints = [0.0]*7
+    init_joints = [0.0]*6
     (x,y,z),(rx,ry,rz,rw) = pose
     print(x,y,z)
     conf = ik.get_ik(init_joints, x,y,z,rx,ry,rz,rw)
     return conf
 
-def pb_solve_ik(body, pose):
-    conf  = p.calculateInverseKinematics(body, 11, pose)
+def pb_solve_ik(body, pose, ee_id):
+    conf  = p.calculateInverseKinematics(body, ee_id, pose)
     return conf
 
 def transform_pose(base, world_from_goal):
@@ -97,34 +85,52 @@ def transform_pose(base, world_from_goal):
     # tg = tw * wg 
     torso_from_world = invert(get_link_pose(base, 0))
     tg = multiply(torso_from_world, world_from_goal)
-    print(tg)
     return tg
 
 
-def main():
+def pb_ik_main():
     global base
-    pose = ((0.5, 0.5,0.5),(0,0,0,1))
-    conf = solve_ik('buff_digit/panda_arm_hand.urdf', pose)
+    pose = ((0.3, -0.3,1),(0,0,0,1))
+    ee_id = 16
+    ree_id = 33
+    conf = pb_solve_ik(base, pose[0],ree_id)
+    # print('conf: ',conf)
+    joints = get_movable_joints(base)
+    # joints = [1,2,3,4,5,6]
+    # set_joint_motors(base,conf)
+    setMotors(base, joints, conf) 
+    time.sleep(15)
+    print('final pose: ',p.getLinkState(base, ree_id)[0])
+
+
+def tracik_main():
+    global base
+    pose = ((0.3, -0.3,-0.3),(0,0,0,1))
+    # pose = transform_pose(base, pose)
+    # print('trans: ',pose)
+    conf = solve_ik('buff_digit/digit_arm.urdf', pose)
     if conf is None:
         print('Cannot reach')
         return
+    ee_id = 16
 
-    # conf = pb_solve_ik(base, pose[0])
+    # conf = pb_solve_ik(base, pose[0],ee_id)
     # print('len')
     print('conf: ',conf)
     # joints = [10,11,12,13,14,15]
-    joints = [0,1,2,3,4,5,6]
+    # joints = [1,2,3,4,5,6,8,9]
+    joints = [1,2,3,4,5,6]
     # set_joint_motors(base,conf)
-    j=(0.14720490730995048, 0.8472134373227671, 0.8598701236671977, -1.4895870318659121, 2.4598493739297553, 1.1226250704200282, -0.35609815106501336)
-    setMotors(base, joints, conf)
-    # print('conf: ',conf)
-    ee_id = 8
+    setMotors(base, joints, conf) 
     time.sleep(10)
     print('final pose: ',p.getLinkState(base, ee_id)[0])
 
 
 def joint_teleop():
+    right_arm_joints = [1,2,3,4,5,6]
+    ee_id = 16
     while True:
+        print('final pose: ',p.getLinkState(base, ee_id)[0]);print('')
         keys = p.getKeyboardEvents()
         if ord('a') in keys:
             joint = right_arm_joints[0]
@@ -194,11 +200,11 @@ def joint_teleop():
             angle = p.getJointState(base, joint)[0]
             angle += delta
             control_joint(joint, angle, 0.0, 0.3)
-# time.sleep(1)
-# print(p.getLinkState(base, 13)[0])
-# time.sleep(100)
+
+
 
 if __name__ == '__main__':
-    main()
+    pb_ik_main()
+    # joint_teleop()
     # transform_pose(base, ((0.3,0,0.7),(0,0,0,1)))
     time.sleep(100)

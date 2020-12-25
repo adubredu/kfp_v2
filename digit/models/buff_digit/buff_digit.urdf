@@ -57,13 +57,10 @@
 
 
   <!-- joint to torso -->
-  <joint name="left_panda_to_torso" type="revolute">
+  <joint name="left_panda_to_torso" type="fixed">
     <origin rpy="-1.57079632679 -1.3962633 0" xyz="-0.001 0.08 0.35"/>
-    <axis xyz="0 0 1"/>
     <parent link="torso"/>
     <child link="left_panda_link0"/>
-     <dynamics damping="0.5" friction="100"/>
-    <limit effort="1.4" lower="-1.309" upper="1.309" velocity="12.5"/>
   </joint>
 
   <link name="left_panda_link0">
@@ -298,13 +295,10 @@
   </joint>
 
   <!-- right panda to torso joint -->
-  <joint name="right_panda_to_torso" type="revolute">
+  <joint name="right_panda_to_torso" type="fixed">
     <origin rpy="1.57079632679 -1.3962633 0" xyz="-0.001 -0.08 0.35"/>
-    <axis xyz="0 0 1"/>
     <parent link="torso"/>
     <child link="right_panda_link0"/>
-    <limit effort="1.4" lower="-1.309" upper="1.309" velocity="12.5"/>
-    <dynamics damping="0.5" friction="100"/>
   </joint>
 
 
