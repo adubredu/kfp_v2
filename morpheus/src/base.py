@@ -16,8 +16,8 @@ class Base:
 		self.turn_tol = 0.05
 		self.trans_tol = 0.3
 		self.final_trans_tol = 0.05
-		self.left_wheel_id = 37
-		self.right_wheel_id = 38
+		self.left_wheel_id = 36
+		self.right_wheel_id = 37
 		self.wheel_width = 0.5
 
 	def angle_diff(self, angle1, angle2):
@@ -115,13 +115,18 @@ if __name__ == '__main__':
 	p.loadURDF('morpheus/models/floor/floor.urdf')
 	# base_id = p.loadURDF('morpheus/models/fetch_description/robots/freight.urdf')
 
-	base_id = p.loadURDF('digit/models/buff_digit/buff_digit.urdf')
+	base_id = p.loadURDF('digit/models/buff_digit/digit_freight.urdf')
 	base = Base(client, base_id)
 	# base.move_to_pose([2.0,0.0,None])
 	# base.move_to_pose([2.0,2.0,None])
 	# base.move_to_pose([0.0,2.0,None])
 	# base.move_to_pose([0.0,0.0, 0.0])
-
+	p.setJointMotorControl2(base_id, 11,
+				controlMode=p.POSITION_CONTROL,targetPosition=1.57,
+				force=3000)
+	p.setJointMotorControl2(base_id, 28,
+				controlMode=p.POSITION_CONTROL,targetPosition=-1.57,
+				force=3000)
 	base.plan_and_drive_to_pose([5.0,5.0,0.0],[100,100])
 	print('here')
 	time.sleep(100)

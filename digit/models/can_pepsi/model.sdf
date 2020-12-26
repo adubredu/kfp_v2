@@ -34,7 +34,7 @@
 
        <inertial>
           <pose>0 0 0 0 0 0</pose>
-          <mass>0.56</mass>
+          <mass>0.00056</mass>
           <inertia>
             <ixx>0.004878</ixx>
             <ixy>-6.2341e-07</ixy>

@@ -1021,7 +1021,7 @@
 
 <!-- joint to freight base -->
 <joint name="digit_to_freight" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0  0.9"/>
+    <origin rpy="0 0 0" xyz="0 0  0.7"/>
     <parent link="base_link"/>
     <child link="torso"/>
 </joint>
@@ -1034,159 +1034,318 @@
 </joint>
 
 
-<link name="base_link">
-    <inertial>
-      <origin rpy="0 0 0" xyz="-0.0036 0.0 0.0014" />
-      <mass value="100.1294" />
-      <inertia ixx="1.225" ixy="0.0099" ixz="0.0062" iyy="1.2853" iyz="-0.0034" izz="0.987" />
-    </inertial>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <geometry>
-        <!-- <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/fetch_description/robots/meshes/base_link.dae" /> -->
-        <box size="0.01 0.01 0.01"/>
-      </geometry>
-      <material name="one">
-        <color rgba="0.356 0.361 0.376 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <geometry>
-        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/fetch_description/robots/meshes/base_link_collision.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <link name="r_wheel_link">
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <mass value="4.3542" />
-      <inertia ixx="0.0045" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.0045" />
-    </inertial>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <geometry><!-- 
-        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/fetch_description/robots/meshes/r_wheel_link.STL" /> -->
-        <box size="0.01 0.01 0.01"/>
-      </geometry>
-      <material name="two">
-        <color rgba="0.086 0.506 0.767 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <geometry>
-        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/fetch_description/robots/meshes/r_wheel_link_collision.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint name="r_wheel_joint" type="continuous">
-    <origin rpy="-6.123E-17 0 0" xyz="0.0012914 -0.18738 0.055325" />
-    <parent link="base_link" />
-    <child link="r_wheel_link" />
-    <axis xyz="0 1 0" />
-  <limit effort="8.85" velocity="34.8" /></joint>
-  <link name="l_wheel_link">
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <mass value="4.3542" />
-      <inertia ixx="0.0045" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.0045" />
-    </inertial>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <geometry>
-        <!-- <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/fetch_description/robots/meshes/l_wheel_link.STL" /> -->
-        <box size="0.01 0.01 0.01"/>
-      </geometry>
-      <material name="three">
-        <color rgba="0.086 0.506 0.767 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <geometry>
-        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/fetch_description/robots/meshes/l_wheel_link_collision.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint name="l_wheel_joint" type="continuous">
-    <origin rpy="-6.123E-17 0 0" xyz="0.0012914 0.18738 0.055325" />
-    <parent link="base_link" />
-    <child link="l_wheel_link" />
-    <axis xyz="0 1 0" />
-  <limit effort="8.85" velocity="34.8" />
-</joint>
-  <link name="estop_link">
-    <inertial>
-      <origin rpy="0 0 0" xyz="0.002434512737072 -0.00330608315239905 0.00665139196650039" />
-      <mass value="0.00196130439134723" />
-      <inertia ixx="3.02810026604417E-07" ixy="-1.5862023118056E-08" ixz="3.16561396557437E-08" iyy="2.93322917127605E-07" iyz="-4.28833522751273E-08" izz="2.28513272627183E-07" />
-    </inertial>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <geometry>
-       <!--  <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/fetch_description/robots/meshes/estop_link.STL" /> -->
-        <box size="0.01 0.01 0.01"/>
-      </geometry>
-      <material name="four">
-        <color rgba="0.8 0 0 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <geometry>
-        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/fetch_description/robots/meshes/estop_link.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint name="estop_joint" type="fixed">
-    <origin rpy="1.5708 0 0" xyz="-0.12465 0.23892 0.31127" />
-    <parent link="base_link" />
-    <child link="estop_link" />
-    <axis xyz="0 0 0" />
-  </joint>
-  <link name="laser_link">
-    <inertial>
-      <origin rpy="0 0 0" xyz="-0.0306228970175641 0.0007091682908278 0.0551974119471302" />
-      <mass value="0.00833634573995571" />
-      <inertia ixx="1.01866461240801E-06" ixy="-5.88447626567756E-08" ixz="7.83857244757914E-08" iyy="5.10039589974707E-07" iyz="-7.12664289617235E-09" izz="1.28270671527309E-06" />
-    </inertial>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <geometry>
-       <!--  <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/fetch_description/robots/meshes/laser_link.STL" /> -->
-       <box size="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="five">
-        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <geometry>
-        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/fetch_description/robots/meshes/laser_link.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint name="laser_joint" type="fixed">
-    <origin rpy="3.14159265359 0 0" xyz="0.235 0 0.2878" />
-    <parent link="base_link" />
-    <child link="laser_link" />
-    <axis xyz="0 0 0" />
-  </joint>
-  <link name="base_camera_link" />
-  <joint name="base_camera_joint" type="fixed">
-    <origin rpy="0 -0.17453292519943 0" xyz="0.2645 0 0.198" />
-    <parent link="base_link" />
-    <child link="base_camera_link" />
-  </joint>
-  <link name="base_camera_optical_frame" />
-  <joint name="base_camera_optical_joint" type="fixed">
-    <origin rpy="1.5707963267966 0 1.5707963267966" xyz="0 0 0" />
-    <parent link="base_camera_link" />
-    <child link="base_camera_optical_frame" />
-  </joint>
 
+<link name="base_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/base_link.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="Black"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.12498"/>
+      <geometry>
+        <!-- Make collision box slightly bigger in x and z directions. -->
+        <box size="1.0074 0.5709 0.2675"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="33.455"/>
+      <origin xyz="-0.08748 -0.00085 0.09947"/>
+      <inertia ixx="0.6022" ixy="-0.02364" ixz="-0.1197" iyy="1.7386" iyz="-0.001544" izz="2.0296"/>
+    </inertial>
+  </link>
+  <gazebo reference="base_link">
+    </gazebo>
+  <!-- IMU Link is the standard mounting position for the UM6 IMU.-->
+  <!-- Can be modified with environment variables in /etc/ros/setup.bash -->
+  <link name="imu_link"/>
+  <joint name="imu_joint" type="fixed">
+    <origin rpy="$(optenv HUSKY_IMU_RPY 0 -1.5708 3.1416)" xyz="$(optenv HUSKY_IMU_XYZ 0.19 0 0.149)"/>
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+  </joint>
+  <gazebo reference="imu_link">
+    </gazebo>
+  <!-- Husky wheel macros -->
+  <link name="front_left_wheel_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <stiffness value="30000"/>
+      <damping value="1000"/>
+    </contact>
+    
+    <inertial>
+      <mass value="2.637"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.02467" ixy="0" ixz="0" iyy="0.02467" iyz="0" izz="0.04411"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/wheel.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="1.570795 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1143" radius="0.17775"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="front_left_wheel_link">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <joint name="front_left_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_left_wheel_link"/>
+    <origin rpy="0 0 0" xyz="0.256 0.2854 0.03282"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+  </joint>
+  <transmission name="front_left_wheel_trans" type="SimpleTransmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="front_left_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="front_left_wheel">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link name="front_right_wheel_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <stiffness value="30000"/>
+      <damping value="1000"/>
+    </contact>
+    
+    <inertial>
+      <mass value="2.637"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.02467" ixy="0" ixz="0" iyy="0.02467" iyz="0" izz="0.04411"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/wheel.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="1.570795 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1143" radius="0.17775"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="front_right_wheel_link">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <joint name="front_right_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_right_wheel_link"/>
+    <origin rpy="0 0 0" xyz="0.256 -0.2854 0.03282"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+  </joint>
+  <transmission name="front_right_wheel_trans" type="SimpleTransmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="front_right_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="front_right_wheel">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link name="rear_left_wheel_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <stiffness value="30000"/>
+      <damping value="1000"/>
+    </contact>
+    
+    <inertial>
+      <mass value="2.637"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.02467" ixy="0" ixz="0" iyy="0.02467" iyz="0" izz="0.04411"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/wheel.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="1.570795 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1143" radius="0.17775"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="rear_left_wheel_link">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <joint name="rear_left_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear_left_wheel_link"/>
+    <origin rpy="0 0 0" xyz="-0.256 0.2854 0.03282"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+  </joint>
+  <transmission name="rear_left_wheel_trans" type="SimpleTransmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="rear_left_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="rear_left_wheel">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link name="rear_right_wheel_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <stiffness value="30000"/>
+      <damping value="1000"/>
+    </contact>
+    
+    <inertial>
+      <mass value="2.637"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.02467" ixy="0" ixz="0" iyy="0.02467" iyz="0" izz="0.04411"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/wheel.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="1.570795 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1143" radius="0.17775"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="rear_right_wheel_link">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <joint name="rear_right_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear_right_wheel_link"/>
+    <origin rpy="0 0 0" xyz="-0.256 -0.2854 0.03282"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+  </joint>
+  <transmission name="rear_right_wheel_trans" type="SimpleTransmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="rear_right_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="rear_right_wheel">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link name="top_plate_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/top_plate.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="Yellow"/>
+    </visual>
+  </link>
+  <joint name="top_plate" type="fixed">
+    <parent link="base_link"/>
+    <child link="top_plate_link"/>
+  </joint>
+  <gazebo reference="top_plate_link">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+  <link name="user_rail_link">
+    <visual>
+      <geometry>
+        <!-- <mesh filename="meshes/user_rail.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+  </link>
+  <joint name="user_rail" type="fixed">
+    <origin rpy="0 0 0" xyz="0.272 0 0.245"/>
+    <parent link="base_link"/>
+    <child link="user_rail_link"/>
+  </joint>
+  <gazebo reference="user_rail_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  <link name="front_bumper_link">
+    <visual>
+      <geometry>
+        <!-- <mesh filename="meshes/bumper.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+  </link>
+  <joint name="front_bumper" type="fixed">
+    <origin rpy="0 0 0" xyz="0.48 0 0.091"/>
+    <parent link="base_link"/>
+    <child link="front_bumper_link"/>
+  </joint>
+  <gazebo reference="front_bumper_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  <link name="rear_bumper_link">
+    <visual>
+      <geometry>
+        <!-- <mesh filename="meshes/bumper.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+  </link>
+  <joint name="rear_bumper" type="fixed">
+    <origin rpy="0 0 3.14159" xyz="-0.48 0 0.091"/>
+    <parent link="base_link"/>
+    <child link="rear_bumper_link"/>
+  </joint>
+  <gazebo reference="rear_bumper_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
 
 
 
