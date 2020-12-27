@@ -9,9 +9,9 @@ from pybullet_planning import Pose, Point
 
 
 class Buff_digit:
-    def __init__(self, client, base_id):
+    def __init__(self, client, robot_id):
         self.client = client 
-        self.id = base_id
+        self.id = robot_id
         self.state = "turn"
         self.max_angular_speed = 1.0
         self.max_linear_speed = 2.0
