@@ -18,13 +18,14 @@ class Buff_digit:
         self.turn_tol = 0.05
         self.trans_tol = 0.3
         self.final_trans_tol = 0.05
-        self.left_wheel_id = 32
-        self.right_wheel_id = 33
+        self.left_wheel_id = 36
+        self.right_wheel_id = 37
         self.wheel_width = 0.8
-        self.arms_ee = {'left_arm':16, 
-                        'right_arm':31}
-        self.arm_joints = {'left_arm':[10,11,12,13,14,15], 
-                           'right_arm':[25, 26, 27,28,29,30]}
+        self.arms_ee = {'left_arm':20, 
+                        'right_arm':36}
+        self.arm_joints = {'left_arm':[10,12,14,16,18,19], 
+                           'right_arm':[29,30,31,32,33,34]}
+        self.elbow_joints={'left_arm':(16,-1.35), 'right_arm':(32,1.35)}
         self.joint_index_ranges = {'left_arm':(8,14), 
                                    'right_arm':(22,28)}
         self.gripper_joints = {'left_arm':(17,18), 
@@ -32,11 +33,9 @@ class Buff_digit:
         self.grasped = {'left_arm':0, 'right_arm':0}
         self.start_up_robot()
         
-    def tuck_arms(self):
-        self.left_elbow_joint = 13
-        self.right_elbow_joint = 28
-        self.drive_arm_joints([self.left_elbow_joint,
-            self.right_elbow_joint], [-1.0,1.0])
+    def tuck_arm(self, armname):
+        elbow_joint = self.elbow_joints[armname]
+        self.drive_arm_joints([elbow_joint[0]], [elbow_joint[1]])
 
 
     def start_up_robot(self):

@@ -1,8 +1,7 @@
 import pybullet as p 
 import pybullet_data
-from pybullet_planning import get_joint_limits, multiply, get_link_pose,invert
-from trac_ik_python.trac_ik import IK
-
+from pybullet_planning import get_joint_limits, multiply, get_link_pose,invert,get_movable_joints
+ 
 import time
 
 direct = p.connect(p.GUI)  
@@ -16,14 +15,15 @@ p.loadURDF('floor/floor.urdf')
 
 # yumi = p.loadURDF('yumi_description/yumi_grippers.urdf', [1,1,0])
 # base = p.loadURDF('buff_digit/panda_arm_hand.urdf',[0,0,0], useFixedBase=True)
-base = p.loadURDF('buff_digit/panda.urdf',[0,0,0], useFixedBase=True)
-
-right_arm_joints = [8,9,10,11,12,13]
+# base = p.loadURDF('buff_digit/digit_arm.urdf',[0,-0.5,0], useFixedBase=True)
+base = p.loadURDF('buff_digit/prost_digit_freight.urdf',[0,0,0], useFixedBase=True)
+right_arm_joints = [0,2,4,6,8,9]
 # print(len(joint_pos))
 # print(p.getNumJoints(base))
 for i in range(p.getNumJoints(base)):
     print('')
     print(p.getJointInfo(base, i))
+print(get_movable_joints(base))
 #     # qIndex = j[3]
     # if qIndex > -1:
     #     print(j)
@@ -36,7 +36,7 @@ for i in range(p.getNumJoints(base)):
 # lift_index=7
 # cid = p.createConstraint(base, lift_index, yumi, -1, p.JOINT_FIXED, [0, 0, 1], [0, 0, 0], [0., 0., 0])
 
-time.sleep(3)
+# time.sleep(300)
 def control_joint(joint, value, minn, maxx):
     global base
     minn, maxx = get_joint_limits(base, joint)
@@ -104,12 +104,12 @@ def transform_pose(base, world_from_goal):
 def main():
     global base
     pose = ((0.5, 0.5,0.5),(0,0,0,1))
-    conf = solve_ik('buff_digit/panda_arm_hand.urdf', pose)
-    if conf is None:
-        print('Cannot reach')
-        return
+    # conf = solve_ik('buff_digit/panda_arm_hand.urdf', pose)
+    # if conf is None:
+    #     print('Cannot reach')
+    #     return
 
-    # conf = pb_solve_ik(base, pose[0])
+    conf = pb_solve_ik(base, pose[0])
     # print('len')
     print('conf: ',conf)
     # joints = [10,11,12,13,14,15]
@@ -125,6 +125,7 @@ def main():
 
 def joint_teleop():
     while True:
+        joint_angles = [x[0] for x in p.getJointStates(base, [0,2,4,6])]
         keys = p.getKeyboardEvents()
         if ord('a') in keys:
             joint = right_arm_joints[0]
@@ -154,23 +155,30 @@ def joint_teleop():
             angle = p.getJointState(base, joint)[0]
             angle -= delta
             control_joint(joint, angle, 0.0, 0.3)
+            
+
 
         if ord('n') in keys:
             joint = right_arm_joints[2]
             angle = p.getJointState(base, joint)[0]
             angle += delta
             control_joint(joint, angle, 0.0, 0.3)
+            
+
         if ord('i') in keys:
             joint = right_arm_joints[3]
             angle = p.getJointState(base, joint)[0]
             angle -= delta
             control_joint(joint, angle, 0.0, 0.3)
+            print(joint_angles[3])
 
         if ord('o') in keys:
             joint = right_arm_joints[3]
             angle = p.getJointState(base, joint)[0]
             angle += delta
             control_joint(joint, angle, 0.0, 0.3)
+            print(joint_angles[3])
+
         if ord(',') in keys:
             joint = right_arm_joints[4]
             angle = p.getJointState(base, joint)[0]
@@ -195,10 +203,10 @@ def joint_teleop():
             angle += delta
             control_joint(joint, angle, 0.0, 0.3)
 # time.sleep(1)
-# print(p.getLinkState(base, 13)[0])
+        # print(p.getLinkState(base, 10)[0])
 # time.sleep(100)
 
 if __name__ == '__main__':
-    main()
+    joint_teleop()
     # transform_pose(base, ((0.3,0,0.7),(0,0,0,1)))
     time.sleep(100)
