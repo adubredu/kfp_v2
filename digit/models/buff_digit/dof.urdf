@@ -1,0 +1,425 @@
+<?xml version="0.0" ?>
+<robot name="morpheus">
+  <link name="shoulder">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <mass value=".01"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.2"/>
+      </geometry>
+       <material name="grey">
+        <color rgba="0.23 0.22 0.21 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+       <cylinder radius="0.1" length="0.2"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="elbow">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.25"/>
+      <geometry>
+        <box size="0.05 0.05 0.5"/>
+      </geometry>
+       <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.25"/>
+      <geometry>
+       <box size="0.05 0.05 0.5"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="shoulder_to_elbow" type="revolute">
+    <parent link="shoulder"/>
+    <child link="elbow"/>
+    <origin rpy="0 0 0" xyz="0 0 0.2"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.1415" upper="3.1415" effort="10" velocity="0.25"/>
+  </joint>
+
+  <link name="cap">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0  0" xyz="0 0 0.05"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.2"/>
+      </geometry>
+       <material name="grey">
+        <color rgba="0.23 0.22 0.21 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="1.57 0  0 " xyz="0 0 0.05"/>
+      <geometry>
+       <cylinder radius="0.1" length="0.2"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="elbow_to_cap" type="fixed">
+    <parent link="elbow"/>
+    <child link="cap"/>
+    <origin rpy="0 0 0" xyz="0 0 0.45"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="ulna">
+    <inertial>
+      <origin rpy="0 1.57 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.57 0" xyz="0.25 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.5"/>
+      </geometry>
+       <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57 0" xyz="0.25 0 0"/>
+      <geometry>
+       <box size="0.05 0.05 0.5"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="cap_to_ulna" type="revolute">
+    <parent link="cap"/>
+    <child link="ulna"/>
+    <origin rpy="0 0 0" xyz="0 0 0.05"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-3.1415" upper="3.1415" effort="10" velocity="0.25"/>
+  </joint>
+
+  <link name="carpal">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0  0" xyz="0 0 0.0"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.2"/>
+      </geometry>
+       <material name="grey">
+        <color rgba="0.23 0.22 0.21 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="1.57 0  0 " xyz="0 0 0.0"/>
+      <geometry>
+       <cylinder radius="0.1" length="0.2"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="ulna_to_carpal" type="fixed">
+    <parent link="ulna"/>
+    <child link="carpal"/>
+    <origin rpy="0 0 0" xyz="0.5 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- Stem -->
+  <link name="phalange">
+    <inertial>
+      <origin rpy="0 1.57 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.57 0" xyz="0.25 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.5"/>
+      </geometry>
+       <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57 0" xyz="0.25 0 0"/>
+      <geometry>
+       <box size="0.05 0.05 0.5"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="carpal_to_phalange" type="revolute">
+    <parent link="carpal"/>
+    <child link="phalange"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-3.1415" upper="3.1415" effort="10" velocity="0.25"/>
+  </joint>
+
+  <!-- <link name="ee">
+    <inertial>
+      <origin rpy="0 1.57 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.57 0" xyz="0.0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.05"/>
+      </geometry>
+       <material name="blue">
+        <color rgba="0.01 0.01 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57 0" xyz="0.0 0 0"/>
+      <geometry>
+       <box size="0.05 0.05 0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="phalange_to_ee" type="fixed">
+    <parent link="phalange"/>
+    <child link="ee"/>
+    <origin rpy="0 0 0" xyz="0.5 0. 0.0"/>
+  </joint> -->
+
+  <link name="j4">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.57  0" xyz="0 0 0.0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.1"/>
+      </geometry>
+       <material name="grey">
+        <color rgba="0.23 0.22 0.21 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57  0 " xyz="0 0 0.0"/>
+      <geometry>
+       <cylinder radius="0.05" length="0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="phalange_to_j4" type="fixed">
+    <parent link="phalange"/>
+    <child link="j4"/>
+    <origin rpy="0 0 0" xyz="0.5 0. 0.0"/>
+  </joint> 
+
+  <link name="l4">
+    <inertial>
+      <origin rpy="0 1.57 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.57 0" xyz="0.0625 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.125"/>
+      </geometry>
+       <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57 0" xyz="0.0625 0 0"/>
+      <geometry>
+       <box size="0.05 0.05 0.125"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="j4_to_l4" type="revolute">
+    <parent link="j4"/>
+    <child link="l4"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-3.1415" upper="3.1415" effort="10" velocity="0.25"/>
+  </joint>
+
+  <link name="j5">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.57 0  0" xyz="0 0 0.0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.1"/>
+      </geometry>
+       <material name="grey">
+        <color rgba="0.23 0.22 0.21 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="1.57 0  0 " xyz="0 0 0.0"/>
+      <geometry>
+       <cylinder radius="0.05" length="0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="l4_to_j5" type="fixed">
+    <parent link="l4"/>
+    <child link="j5"/>
+    <origin rpy="0 0 0" xyz="0.125 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+ <!--  ]]]]] -->
+ <link name="l5">
+    <inertial>
+      <origin rpy="0 1.57 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.57 0" xyz="0.0625 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.125"/>
+      </geometry>
+       <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57 0" xyz="0.0625 0 0"/>
+      <geometry>
+       <box size="0.05 0.05 0.125"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="j4_to_l5" type="revolute">
+    <parent link="j5"/>
+    <child link="l5"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-3.1415" upper="3.1415" effort="10" velocity="0.25"/>
+  </joint>
+ 
+<!--last-->
+<link name="j6">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.57  0" xyz="0 0 0.0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.1"/>
+      </geometry>
+       <material name="grey">
+        <color rgba="0.23 0.22 0.21 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57  0 " xyz="0 0 0.0"/>
+      <geometry>
+       <cylinder radius="0.05" length="0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="l5_to_j6" type="fixed">
+    <parent link="l5"/>
+    <child link="j6"/>
+    <origin rpy="0 0 0" xyz="0.125 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <!-- ... -->
+   <link name="l6">
+    <inertial>
+      <origin rpy="0 1.57 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.57 0" xyz="0.0625 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.125"/>
+      </geometry>
+       <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.57 0" xyz="0.0625 0 0"/>
+      <geometry>
+       <box size="0.05 0.05 0.125"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="j6_to_l6" type="revolute">
+    <parent link="j6"/>
+    <child link="l6"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-3.1415" upper="3.1415" effort="10" velocity="0.25"/>
+  </joint>
+  
+<link name="ee">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <mass value=".000000001"/>
+       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0. 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.05"/>
+      </geometry>
+       <material name="blue">
+        <color rgba="0.01 0.01 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0. 0 0"/>
+      <geometry>
+       <box size="0.05 0.05 0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="l6_to_ee" type="fixed">
+    <parent link="l6"/>
+    <child link="ee"/>
+    <origin rpy="0 0 0" xyz="0.125 0 0"/>
+  </joint>
+
+
+
+</robot>

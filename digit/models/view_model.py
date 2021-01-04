@@ -1,6 +1,7 @@
 import pybullet as p 
 import pybullet_data
 from pybullet_planning import get_joint_limits, multiply, get_link_pose,invert,get_movable_joints
+import pybullet_planning as pyplan
  
 import time
 
@@ -12,29 +13,20 @@ p.setGravity(0, 0, -9.81)
 p.setRealTimeSimulation(1)
 p.setAdditionalSearchPath('.')
 p.loadURDF('floor/floor.urdf')
-
-# yumi = p.loadURDF('yumi_description/yumi_grippers.urdf', [1,1,0])
-# base = p.loadURDF('buff_digit/panda_arm_hand.urdf',[0,0,0], useFixedBase=True)
-# base = p.loadURDF('buff_digit/digit_arm.urdf',[0,-0.5,0], useFixedBase=True)
+ 
 base = p.loadURDF('buff_digit/prost_digit_freight.urdf',[0,0,0], useFixedBase=True)
-right_arm_joints = [0,2,4,6,8,9]
+ 
+right_arm_joints = [0,1,5,7,8,9]
 # print(len(joint_pos))
 # print(p.getNumJoints(base))
 for i in range(p.getNumJoints(base)):
     print('')
     print(p.getJointInfo(base, i))
 print(get_movable_joints(base))
-#     # qIndex = j[3]
-    # if qIndex > -1:
-    #     print(j)
-	# p.setJointMotorControl2(base, i,
-				# controlMode=p.POSITION_CONTROL,targetPosition=joint_pos[i],
-				# force=3000)
 
-# yumi = p.loadURDF('yumi_description/yumi_grippers.urdf', [0.2,0,1])
 
-# lift_index=7
-# cid = p.createConstraint(base, lift_index, yumi, -1, p.JOINT_FIXED, [0, 0, 1], [0, 0, 0], [0., 0., 0])
+print(pyplan.get_link_pose(base,pyplan.link_from_name(base, 'right_gripper_ee'))) 
+print(pyplan.get_link_pose(base,pyplan.link_from_name(base, 'left_gripper_ee'))) 
 
 # time.sleep(300)
 def control_joint(joint, value, minn, maxx):
@@ -51,22 +43,14 @@ def control_joint(joint, value, minn, maxx):
 
 
 
-def setMotors(bodyId, joints,jointPoses):
-    """
-    Parameters
-    ----------
-    bodyId : int
-    jointPoses : [float] * numDofs
-    """
-    assert(len(joints)==len(jointPoses))
-    numJoints = p.getNumJoints(bodyId)
+def setMotors(bodyId, joints,jointPoses): 
+    assert(len(joints)==len(jointPoses)) 
 
     for i,j in enumerate(joints):
         p.setJointMotorControl2(bodyIndex=bodyId, jointIndex=j, controlMode=p.POSITION_CONTROL, targetPosition=jointPoses[i])
         p.stepSimulation()
 
-# setMotors(base, joint_pos)
-	# p.stepSimulation()
+ 
 def set_joint_motors(base, jointPoses):
     numJoints = p.getNumJoints(base)
     # for i in range(100):
