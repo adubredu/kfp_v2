@@ -16,7 +16,10 @@ p.loadURDF('floor/floor.urdf')
  
 base = p.loadURDF('buff_digit/prost_digit_freight.urdf',[0,0,0], useFixedBase=True)
  
-right_arm_joints = [0,1,5,7,8,9]
+right_arm_joints = [17,18,22,24,25,26]
+left_arm_joints = [4,5,9,11,12,13]
+right_rest_conf = [-1.3587102702612153, -0.9894200000000005, 1.68495071580311, 0.20924737443538863, -0.0845840976133051, 0.20295805908247894]
+left_rest_conf = [-1.3587102702612153, 0.9894200000000005, -1.68495071580311, 0.20924737443538863, -0.0845840976133051, 0.20295805908247894]
 # print(len(joint_pos))
 # print(p.getNumJoints(base))
 for i in range(p.getNumJoints(base)):
@@ -27,6 +30,7 @@ print(get_movable_joints(base))
 
 print(pyplan.get_link_pose(base,pyplan.link_from_name(base, 'right_gripper_ee'))) 
 print(pyplan.get_link_pose(base,pyplan.link_from_name(base, 'left_gripper_ee'))) 
+
 
 # time.sleep(300)
 def control_joint(joint, value, minn, maxx):
@@ -108,8 +112,10 @@ def main():
 
 
 def joint_teleop():
+    setMotors(base, right_arm_joints,right_rest_conf)
+    setMotors(base, left_arm_joints, left_rest_conf)
     while True:
-        joint_angles = [x[0] for x in p.getJointStates(base, [0,2,4,6])]
+        joint_angles = [x[0] for x in p.getJointStates(base, right_arm_joints)]
         keys = p.getKeyboardEvents()
         if ord('a') in keys:
             joint = right_arm_joints[0]
@@ -186,6 +192,7 @@ def joint_teleop():
             angle = p.getJointState(base, joint)[0]
             angle += delta
             control_joint(joint, angle, 0.0, 0.3)
+        # print(joint_angles)
 # time.sleep(1)
         # print(p.getLinkState(base, 10)[0])
 # time.sleep(100)

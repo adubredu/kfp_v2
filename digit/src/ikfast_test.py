@@ -37,8 +37,8 @@ def set_joint_motors(bodyId, joints,jointPoses):
         p.stepSimulation()
         time.sleep(0.25)
 time.sleep(5)
-lpose = ((0.5,0.5,1),(0,0,0,1))
-rpose = ((0.5,-0.5,1),(0,0,0,1))
+lpose = ((0.5,0.5,1),p.getQuaternionFromEuler((0,1.5707,0)))
+rpose = ((0.5,-0.5,1),p.getQuaternionFromEuler((0,1.5707,0)))
 
 lrel_pose = tf_arm_frame(robot, lpose, 'left_jlink0')
 rrel_pose = tf_arm_frame(robot, rpose, 'right_jlink0') 
@@ -54,13 +54,15 @@ rgen = solve_ik(rrel_pose[0], rrel_pose[1],'right_arm')
 for a,b in zip(lgen,rgen): 
 	set_joint_motors(robot, left_joints, a)
 	time.sleep(5)
-	print('lee_pose: ',pyplan.get_link_pose(robot, pyplan.link_from_name(robot, 'left_gripper_ee')))
+	pr = pyplan.get_link_pose(robot, pyplan.link_from_name(robot, 'left_gripper_ee'))
+	print('lee_pose: ',pr[0], p.getEulerFromQuaternion(pr[1]))
 	print('-'*15)
 	print(' ')
 
 	set_joint_motors(robot, right_joints, b)
 	time.sleep(5)
-	print('ree_pose: ',pyplan.get_link_pose(robot, pyplan.link_from_name(robot, 'right_gripper_ee')))
+	pr = pyplan.get_link_pose(robot, pyplan.link_from_name(robot, 'right_gripper_ee'))
+	print('ree_pose: ',pr[0], p.getEulerFromQuaternion(pr[1]))
 	print('-'*15)
 	print(' ')
 # '''

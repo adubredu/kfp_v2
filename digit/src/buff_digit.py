@@ -1,11 +1,14 @@
-import numpy as np
-import os
+import numpy as np 
 import time
 import pybullet_data
 import pybullet as p
 import pybullet_planning as pyplan
 from pybullet_planning import Pose, Point
 # from trac_ik_python.trac_ik import IK
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
+from utils.ikfast.digit_ik import solve_ik
 
 
 class Buff_digit:
@@ -21,11 +24,12 @@ class Buff_digit:
         self.left_wheel_id = 36
         self.right_wheel_id = 37
         self.wheel_width = 0.8
-        self.arms_ee = {'left_arm':20, 
-                        'right_arm':36}
-        self.arm_joints = {'left_arm':[10,12,14,16,18,19], 
-                           'right_arm':[29,30,31,32,33,34]}
-        self.elbow_joints={'left_arm':(16,-1.35), 'right_arm':(32,1.35)}
+        self.arms_ee = {'left_arm':14, 'right_arm':27}
+        self.arms_base = {'left_arm':'left_jlink0', 
+                        'right_arm':'right_jlink0'}
+        self.arm_joints = {'left_arm':[4,5,9,11,12,13], 
+                           'right_arm':[17,18,22,24,25,26]}
+        self.elbow_joints={'left_arm':(11,-1.35), 'right_arm':(22,1.35)}
         self.joint_index_ranges = {'left_arm':(8,14), 
                                    'right_arm':(22,28)}
         self.gripper_joints = {'left_arm':(17,18), 
@@ -33,13 +37,20 @@ class Buff_digit:
         self.grasped = {'left_arm':0, 'right_arm':0}
         self.start_up_robot()
         
-    def tuck_arm(self, armname):
-        elbow_joint = self.elbow_joints[armname]
-        self.drive_arm_joints([elbow_joint[0]], [elbow_joint[1]])
+    def tuck_arm(self, armname): 
+        right_start_conf = [-1.3587102702612153, -0.9894200000000005, 1.68495071580311, 0.20924737443538863, -0.0845840976133051, 0.20295805908247894]
+        left_start_conf = [-1.3587102702612153, 0.9894200000000005, -1.68495071580311, 0.20924737443538863, -0.0845840976133051, 0.20295805908247894]
+        if armname == 'left_arm':
+            self.drive_arm_joints(self.arm_joints[armname], left_start_conf)
+        else:
+            self.drive_arm_joints(self.arm_joints[armname], right_start_conf)
+
 
 
     def start_up_robot(self):
         self.lowerLimits,self.upperLimits,self.jointRanges,self.restPoses = self.get_joint_ranges()
+        self.tuck_arm('left_arm')
+        self.tuck_arm('right_arm')
         # self.open_gripper('left_arm')
         # self.open_gripper('right_arm')
 
@@ -47,7 +58,14 @@ class Buff_digit:
         diff = angle2 - angle1
         while diff < -np.pi: diff += 2.0*np.pi
         while diff > np.pi: diff -= 2.0*np.pi
-        return diff 
+        return diff
+
+    def tf_arm_frame(self, pose, armname): 
+        basename = self.arms_base[armname]
+        baseid = pyplan.link_from_name(self.id, basename)
+        base_to_world = pyplan.invert(pyplan.get_link_pose(self.id, baseid))
+        base_to_pose = pyplan.multiply(base_to_world, pose)
+        return base_to_pose 
 
 
     def follow_path(self, path):
@@ -109,7 +127,7 @@ class Buff_digit:
                     self.state = "drive"
 
             elif self.state == "drive":
-                self.tuck_arms()
+                # self.tuck_arms()
                 linear_speed = self.max_linear_speed
                 dist_to_goal = np.linalg.norm(np.array(pose[:2])-np.array(current_pose[:2]))
 
@@ -160,11 +178,6 @@ class Buff_digit:
         return lower_limits, upper_limits, jointRanges, restPoses
 
 
-    def solve_ik(self, position, orientation, ee_id):
-        conf = p.calculateInverseKinematics(self.id, ee_id, position,orientation, lowerLimits=self.lowerLimits, upperLimits=self.upperLimits, jointRanges=self.jointRanges, maxNumIterations=100000,residualThreshold=0.001, restPoses=self.restPoses)
-        return conf
-
-
     def drive_arm_joints(self, joints, jointPoses):
         assert(len(joints)==len(jointPoses))
 
@@ -173,13 +186,17 @@ class Buff_digit:
             p.stepSimulation()
 
 
-    def plan_and_execute_arm_motion(self, position, orientation, armname):
-        ee_id = self.arms_ee[armname]
-        conf = self.solve_ik(position,orientation,ee_id)
-        joints = self.arm_joints[armname]
-        ranges = self.joint_index_ranges[armname]
-        joint_confs = conf[ranges[0]:ranges[1]]
-        self.drive_arm_joints(joints, joint_confs)
+    def plan_and_execute_arm_motion(self, position, orientation, armname): 
+        pose = self.tf_arm_frame((position, orientation), armname)
+        gen = solve_ik(pose[0], pose[1],armname)
+        a = next(gen)
+        conf = next(gen)
+
+        if conf is not None:
+            joints = self.arm_joints[armname] 
+            self.drive_arm_joints(joints, conf)
+        else:
+            print('No IK solution found')
 
 
     def open_gripper(self, armname):
@@ -199,8 +216,8 @@ class Buff_digit:
         height = aabb[1][2] - aabb[0][2]
         position, _ = pyplan.get_pose(object_id)
         position = list(position)
-        position[2]+=(height/2.0)
-        orientation = p.getQuaternionFromEuler((1.57,1.57,0))
+        position[2]+=(height)
+        orientation = p.getQuaternionFromEuler((0,1.57,0))
         return position, orientation 
 
     def get_side_grasp(self, object_id):
@@ -214,11 +231,33 @@ class Buff_digit:
 
     def hold(self, object_id, armname):
         ee_id = self.arms_ee[armname]
-        self.grasped[armname] = p.createConstraint(self.id, ee_id,object_id,-1,p.JOINT_FIXED,[1,0,0],[0,0,0],[0,0,0])
+        # self.grasped[armname] = p.createConstraint(self.id, ee_id,object_id,-1,p.JOINT_FIXED,[1,0,0],[0,0,0],[0,0,0])
+        self.grasped[armname]=pyplan.add_fixed_constraint(object_id, self.id, ee_id)
 
     def release_hold(self, armname):
         p.removeConstraint(self.grasped[armname])
 
+
+    def pick_up(self, object_id, armname):
+        grasp_position, grasp_orientation = self.get_top_grasp(object_id)
+        self.plan_and_execute_arm_motion(grasp_position, grasp_orientation,armname)
+        time.sleep(5) 
+        self.hold(object_id, armname) 
+        grasp_position[2] += 0.2
+        self.plan_and_execute_arm_motion(grasp_position, grasp_orientation,armname)
+
+
+    def place_at(self, position, armname):
+        orientation = p.getQuaternionFromEuler((0,1.57,0))
+        intermediate_position = position; intermediate_position[2]+=0.2
+        self.plan_and_execute_arm_motion(intermediate_position,orientation,armname)
+        time.sleep(5)
+        intermediate_position[2]-=0.2
+        self.plan_and_execute_arm_motion(intermediate_position,orientation,armname)
+        time.sleep(5)
+        self.release_hold(armname)
+        time.sleep(2)
+        self.tuck_arm(armname)
         
 
 
@@ -248,35 +287,27 @@ if __name__ == '__main__':
     kitchen_path = 'kitchen_description/urdf/kitchen_part_right_gen_convex.urdf'
     with pyplan.HideOutput(enable=True):
         floor = p.loadURDF('floor/floor.urdf',useFixedBase=True)
+
+        robot_id = p.loadURDF('buff_digit/prost_digit_freight.urdf',[0,0,0])
+        robot = Buff_digit(client, robot_id)
+        time.sleep(5)
         kitchen = p.loadURDF(kitchen_path,[-5,0,1.477],useFixedBase=True)
         table1 = p.loadURDF('table/table.urdf',[1.0,0,0], p.getQuaternionFromEuler([0,0,1.57]), useFixedBase=False)
         table2 = p.loadURDF('table/table.urdf',[-1.0,-2.0,0], useFixedBase=False)
         # pepsi = p.loadSDF('can_pepsi/model.sdf')
         # pepsi = pepsi[0]
         # pyplan.set_pose(pepsi, Pose(Point(x=0.7, y=-0.3, z=pyplan.stable_z(pepsi, table1))))
-        robot_id = p.loadURDF('buff_digit/digit_freight.urdf',[0,0,0])
+        
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         pepsi = p.loadURDF("cube_small.urdf")
         pyplan.set_pose(pepsi, Pose(Point(x=0.7, y=-0.3, z=pyplan.stable_z(pepsi, table1))))
 
         
-    robot = Buff_digit(client, robot_id)
-    # for i in range(10):
-    #     robot.plan_and_drive_to_pose([-4,0,0.0],[100,100])
-    #     time.sleep(2)
-    #     robot.plan_and_drive_to_pose([0,0,0.0],[100,100])
-    #     time.sleep(2)
-    # print(pyplan.get_movable_joints(robot.robot))
     
-    grasp_position, grasp_orientation = robot.get_side_grasp(pepsi)
-    robot.plan_and_execute_arm_motion(grasp_position, grasp_orientation,'right_arm')
-    time.sleep(7)
-    # robot.tuck_arms()
-    robot.hold(pepsi, 'right_arm')
-    time.sleep(3)
-    robot.plan_and_drive_to_pose([-3,0,0.0],[100,100])
-    robot.plan_and_execute_arm_motion(grasp_position,grasp_orientation,'right_arm')
-    time.sleep(8)
-    robot.release_hold('right_arm')
+
+    robot.pick_up(pepsi,'right_arm')
+    time.sleep(5)
+    robot.place_at([0.7, 0, 1.1],'right_arm')
+    print('done')
     time.sleep(200)
     
