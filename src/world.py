@@ -43,13 +43,15 @@ class Grocery_World:
     def __init__(self):
         p.setAdditionalSearchPath('../digit/models')
         self.item_names=['YcbStrawberry','YcbPottedMeatCan', 'YcbGelatinBox', 'YcbMasterChefCan', 'YcbTomatoSoupCan']#, 'YcbMustardBottle', 'YcbPear','YcbPottedMeatCan', 'YcbPowerDrill', 'YcbScissors','YcbStrawberry', 'YcbTennisBall',  'YcbTomatoSoupCan']
+        kitchen_path = 'kitchen_description/urdf/kitchen_part_right_gen_convex.urdf'
         self.xrange = (0.6, 0.9)
         self.yrange = (-0.45, -0.2)
         with pyplan.HideOutput(enable=True):
-            floor = p.loadURDF('floor/floor.urdf',useFixedBase=True)
-            table = p.loadURDF('table/table.urdf',[1.0,0,0], p.getQuaternionFromEuler([0,0,1.57]), useFixedBase=True)
-            
-            bag = p.loadURDF('bag/bag.urdf',[0.8,0.05,0.9], p.getQuaternionFromEuler([0,0,1.57]), useFixedBase=True)
+            self.floor = p.loadURDF('floor/floor.urdf',useFixedBase=True)
+            self.kitchen = p.loadURDF(kitchen_path,[-5,0,1.477],useFixedBase=True)
+            self.table = p.loadURDF('table/table.urdf',[1.0,0,0], p.getQuaternionFromEuler([0,0,1.57]), useFixedBase=True)
+            self.dining = p.loadURDF('table/table.urdf',[-1.0,-2.0,0], useFixedBase=False)
+            self.bag = p.loadURDF('bag/bag.urdf',[0.8,0.25,0.9], p.getQuaternionFromEuler([0,0,1.57]), useFixedBase=True)
             self.load_objects()
             
         
@@ -81,13 +83,15 @@ if __name__ == '__main__':
     
     
 
-    gw = Grocery_World()
-    p.setGravity(0, 0, -9.81)
-    # time.sleep(20)
-    rid = p.loadURDF('/home/bill/garage/kfp_v2/digit/models/buff_digit/prost_digit_freight.urdf',[0.2,0,0],useFixedBase=True)
-    robot = Buff_digit(client, rid)
-    robot.tuck_arm('right_arm')
+    
+    with pyplan.HideOutput(enable=True):
+        rid = p.loadURDF('/home/bill/garage/kfp_v2/digit/models/buff_digit/prost_digit_freight.urdf',[0.4,0,0],useFixedBase=True)
+        robot = Buff_digit(client, rid) 
+        time.sleep(5)
+        gw = Grocery_World()
+        p.setGravity(0, 0, -9.81)
     # time.sleep(2)
+    '''
     for item in gw.ob_idx:
         time.sleep(2)
         banana = gw.ob_idx[item]
@@ -109,6 +113,35 @@ if __name__ == '__main__':
         time.sleep(2)
         bag_position, bag_orientation = [0.8,0.35,1.2],p.getQuaternionFromEuler((1.57,1.57,0))
         robot.plan_and_execute_arm_motion(bag_position, bag_orientation,'left_arm')
+    '''
+    pick_pose = [0.4,-0.25,0]
+    place_pose = [0.4,0.25,0]
+    dest_poses = [[0.8,0.22,1.1], [0.8,0.24,1.1], [0.8,0.26,1.1],[0.85,0.22,1.1], [0.85,0.24,1.1], [0.85,0.26,1.1]]
+    base_limits = ((-2.5, -2.5), (2.5, 2.5))
+    ind = 0
+    for item in gw.ob_idx:
+        obj = gw.ob_idx[item]  
+        robot.plan_and_drive_to_pose(pick_pose, base_limits,obstacles=[gw.table,gw.bag])
+        time.sleep(2)
+        try:
+            robot.pick_up(obj,'right_arm')
+        except:
+            continue
+        time.sleep(5)
+
+        robot.plan_and_drive_to_pose(place_pose, base_limits,obstacles=[gw.table,gw.bag])
+        time.sleep(2)
+        robot.place_at(dest_poses[ind],'right_arm')
+        print('done')
+        ind +=1
+        time.sleep(2)
+    dining_pose= [-1.0,-1.0,-1.57]
+    stove_pose = [-4.0,0.5,-3.1415]
+    robot.plan_and_drive_to_pose(dining_pose, base_limits,obstacles=[gw.table,gw.dining])
+    time.sleep(2)
+    robot.tuck_arm('right_arm',side=True)
+    robot.plan_and_drive_to_pose(stove_pose, base_limits,obstacles=[gw.table,gw.dining, gw.kitchen])
+    time.sleep(2)
     time.sleep(205)
     # while 1:
     #     p.stepSimulation()

@@ -14,7 +14,7 @@ p.setRealTimeSimulation(1)
 p.setAdditionalSearchPath('.')
 p.loadURDF('floor/floor.urdf')
  
-base = p.loadURDF('buff_digit/prost_digit_freight.urdf',[0,0,0], useFixedBase=True)
+base = p.loadURDF('buff_digit/prost_digit_hover.urdf',[0,0,0], useFixedBase=False)
  
 right_arm_joints = [17,18,22,24,25,26]
 left_arm_joints = [4,5,9,11,12,13]
