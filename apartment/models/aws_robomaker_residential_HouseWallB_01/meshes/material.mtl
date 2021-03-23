@@ -1,0 +1,37 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v5.0.639693989)
+
+newmtl Material #28
+Kd 0.80000001 0.80000001 0.80000001
+Ka 0.588 0.588 0.588
+Ks 0 0 0
+Ke 0 0 0
+Tf 1 1 1
+d 1
+Ni 1
+Ns 2
+illum 2
+
+newmtl Material #29
+Kd 1 1 1
+Ka 0.588 0.588 0.588
+Ks 0 0 0
+Ke 0 0 0
+Tf 1 1 1
+d 1
+Ni 1
+Ns 2
+illum 2
+map_Kd ../materials/textures/aws_HouseWallB_01.png
+
+newmtl _09 - Default
+Kd 0.45882401 0.92156899 0.86274499
+Ka 0.45882401 0.92156899 0.86274499
+Ks 0 0 0
+Ke 0 0 0
+Tf 1 1 1
+d 0.19999999
+Ni 1
+Ns 2
+illum 2
+

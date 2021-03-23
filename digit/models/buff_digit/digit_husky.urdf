@@ -1,0 +1,1355 @@
+<robot name="buff_digit" >
+
+  <material name="black">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+  <material name="blue">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+  <material name="green">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+  <material name="grey">
+    <color rgba="0.4 0.4 0.4 1.0"/>
+  </material>
+  <material name="silver">
+    <color rgba="0.913725490196 0.913725490196 0.847058823529 1.0"/>
+  </material>
+  <material name="orange">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+  <material name="brown">
+    <color rgba="0.870588235294 0.811764705882 0.764705882353 1.0"/>
+  </material>
+  <material name="red">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+  <material name="scarlet">
+    <color rgba="0.28 0.82 0.8 1"/>
+  </material>
+
+
+
+
+<link name="torso">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.001637 0.0002 0.259547"/>
+      <mass value="0.028392"/>
+      <inertia ixx="0.376284" ixy="-8.8e-05" ixz="0.008378" iyy="0.342655" iyz="6.7e-05" izz="0.100648"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/torso.stl"/>
+      </geometry>
+      <material name="scarlet"/> 
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/torso.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+ 
+
+
+  <!-- LEGS -->
+  <link name="left_hip_roll">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.001967 0.000244 0.031435"/>
+      <mass value="0.915088"/>
+      <inertia ixx="0.001017" ixy="-3e-06" ixz="1.3e-05" iyy="0.001148" iyz="-4e-06" izz="0.000766"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-yaw-housing.stl"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.35 0.35 0.35 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-yaw-housing.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_hip_yaw">
+    <inertial>
+      <origin rpy="0 0 0" xyz="1e-05 -0.001945 0.042033"/>
+      <mass value="0.818753"/>
+      <inertia ixx="0.001627" ixy="-1e-06" ixz="2e-06" iyy="0.001929" iyz="5.3e-05" izz="0.00077"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-pitch-housing.stl"/>
+      </geometry>
+      <material name="light_grey">
+        <color rgba="0.75 0.75 0.75 1"/>
+      </material>
+    </visual>
+     <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-pitch-housing.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_hip_pitch">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.060537 0.000521 -0.038857"/>
+      <mass value="6.244279"/>
+      <inertia ixx="0.011533" ixy="-0.000171" ixz="0.000148" iyy="0.033345" iyz="0.000178" izz="0.033958"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-pitch.stl"/>
+      </geometry>
+      <material name="scarlet"/> 
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-pitch.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_knee">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.045641 0.042154 0.001657"/>
+      <mass value="1.227077"/>
+      <inertia ixx="0.002643" ixy="-0.001832" ixz="6.6e-05" iyy="0.005098" iyz="4.5e-05" izz="0.007019"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/knee.stl"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.35 0.35 0.35 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/knee.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_shin">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.174265 0.010265 0.00107"/>
+      <mass value="0.895793"/>
+      <inertia ixx="0.001128" ixy="0.001098" ixz="0.000196" iyy="0.022492" iyz="-3e-06" izz="0.022793"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/shin.stl"/>
+      </geometry>
+      <material name="scarlet"/> 
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/shin.stl"/>
+      </geometry>
+    </collision>
+  </link>
+ <link name="left_tarsus">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.000932 -0.029183 0.000678"/>
+      <mass value="1.322865"/>
+      <inertia ixx="0.000932" ixy="0.00061" ixz="0.000102" iyy="0.016409" iyz="9e-06" izz="0.016501"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/tarsus.stl"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.35 0.35 0.35 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/tarsus.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_toe_pitch">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.000141 2e-06 3e-06"/>
+      <mass value="0.043881"/>
+      <inertia ixx="5e-06" ixy="0" ixz="0" iyy="8e-06" iyz="0" izz="5e-06"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/toe-pitch.stl"/>
+      </geometry>
+      <material name="light_grey">
+        <color rgba="0.75 0.75 0.75 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/toe-pitch.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_toe_roll">
+    <inertial>
+      <origin rpy="0 0 0" xyz="9e-06 -0.028084 -0.023204"/>
+      <mass value="0.531283"/>
+      <inertia ixx="0.00187" ixy="0" ixz="0" iyy="0.001616" iyz="0.000566" izz="0.000843"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/toe-roll.stl"/>
+      </geometry>
+      <material name="light_grey">
+        <color rgba="0.75 0.75 0.75 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/toe-roll.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- left arm -->
+  <link name="left_shoulder_roll">
+    <inertial>
+      <origin rpy="0 0 0" xyz="9e-06 -0.003158 0.023405"/>
+      <mass value="0.535396"/>
+      <inertia ixx="0.000704" ixy="1.4e-05" ixz="1.2e-05" iyy="0.00075" iyz="3.5e-05" izz="0.000298"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L1.stl"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.35 0.35 0.35 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_shoulder_pitch">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-4.2e-05 -0.061882 -0.073788"/>
+      <mass value="1.440357"/>
+      <inertia ixx="0.006761" ixy="-6e-06" ixz="-3e-06" iyy="0.002087" iyz="-0.002046" izz="0.005778"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L2.stl"/>
+      </geometry>
+      <material name="scarlet">
+        <color rgba="0.89 0.13 0.0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L2.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_shoulder_yaw">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-3e-05 -0.001937 0.11407"/>
+      <mass value="1.065387"/>
+      <inertia ixx="0.006967" ixy="1e-06" ixz="-1e-06" iyy="0.007003" iyz="1.5e-05" izz="0.000673"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L3.stl"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.35 0.35 0.35 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L3.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_elbow">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.107996 -0.000521 -0.017765"/>
+      <mass value="0.550582"/>
+      <inertia ixx="0.000476" ixy="2.9e-05" ixz="0.001403" iyy="0.009564" iyz="1.5e-05" izz="-9e-06"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L4.stl"/>
+      </geometry>
+      <material name="light_grey">
+        <color rgba="0.75 0.75 0.75 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L4.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+<!-- right leg -->
+  <link name="right_hip_roll">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.001967 -0.000244 0.031435"/>
+      <mass value="0.915088"/>
+      <inertia ixx="0.001017" ixy="3e-06" ixz="1.3e-05" iyy="0.001148" iyz="4e-06" izz="0.000766"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-yaw-housing.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.35 0.35 0.35 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-yaw-housing.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_hip_yaw">
+    <inertial>
+      <origin rpy="0 0 0" xyz="1e-05 0.001945 0.042033"/>
+      <mass value="0.818753"/>
+      <inertia ixx="0.001627" ixy="1e-06" ixz="2e-06" iyy="0.001929" iyz="-5.3e-05" izz="0.00077"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-pitch-housing.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="light_grey">
+        <color rgba="0.75 0.75 0.75 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-pitch-housing.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_hip_pitch">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.060537 -0.000521 -0.038857"/>
+      <mass value="6.244279"/>
+      <inertia ixx="0.011533" ixy="0.000171" ixz="0.000148" iyy="0.033345" iyz="-0.000178" izz="0.033958"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-pitch.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="scarlet"/> 
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/hip-pitch.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_knee">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.045641 -0.042154 0.001657"/>
+      <mass value="1.227077"/>
+      <inertia ixx="0.002643" ixy="0.001832" ixz="6.6e-05" iyy="0.005098" iyz="-4.5e-05" izz="0.007019"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/knee.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.35 0.35 0.35 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/knee.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_shin">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.174265 -0.010265 0.00107"/>
+      <mass value="0.895793"/>
+      <inertia ixx="0.001128" ixy="-0.001098" ixz="0.000196" iyy="0.022492" iyz="3e-06" izz="0.022793"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/shin.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="scarlet"/> 
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/shin.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_tarsus">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.000932 0.029183 0.000678"/>
+      <mass value="1.322865"/>
+      <inertia ixx="0.000932" ixy="-0.00061" ixz="0.000102" iyy="0.016409" iyz="-9e-06" izz="0.016501"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/tarsus.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.35 0.35 0.35 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/tarsus.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_toe_pitch">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.000141 -2e-06 3e-06"/>
+      <mass value="0.043881"/>
+      <inertia ixx="5e-06" ixy="0" ixz="0" iyy="8e-06" iyz="0" izz="5e-06"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/toe-pitch.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="light_grey">
+        <color rgba="0.75 0.75 0.75 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/toe-pitch.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_toe_roll">
+    <inertial>
+      <origin rpy="0 0 0" xyz="9e-06 0.028084 -0.023204"/>
+      <mass value="0.531283"/>
+      <inertia ixx="0.00187" ixy="0" ixz="0" iyy="0.001616" iyz="-0.000566" izz="0.000843"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/toe-roll.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="light_grey">
+        <color rgba="0.75 0.75 0.75 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/toe-roll.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- right arm -->
+<link name="right_shoulder_roll">
+    <inertial>
+      <origin rpy="0 0 0" xyz="9e-06 0.003158 0.023405"/>
+      <mass value="0.535396"/>
+      <inertia ixx="0.000704" ixy="-1.4e-05" ixz="1.2e-05" iyy="0.00075" iyz="-3.5e-05" izz="0.000298"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L1.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.35 0.35 0.35 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L1.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_shoulder_pitch">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-4.2e-05 0.061882 -0.073788"/>
+      <mass value="1.440357"/>
+      <inertia ixx="0.006761" ixy="6e-06" ixz="-3e-06" iyy="0.002087" iyz="0.002046" izz="0.005778"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L2.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="scarlet">
+        <color rgba="0.89 0.13 0.0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L2.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_shoulder_yaw">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-3e-05 0.001937 0.11407"/>
+      <mass value="1.065387"/>
+      <inertia ixx="0.006967" ixy="-1e-06" ixz="-1e-06" iyy="0.007003" iyz="-1.5e-05" izz="0.000673"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L3.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.35 0.35 0.35 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L3.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_elbow">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.107996 0.000521 -0.017765"/>
+      <mass value="0.550582"/>
+      <inertia ixx="0.000476" ixy="-2.9e-05" ixz="0.001403" iyy="0.009564" iyz="-1.5e-05" izz="-9e-06"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L4.stl" scale="1 -1 1"/>
+      </geometry>
+      <material name="light_grey">
+        <color rgba="0.75 0.75 0.75 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="stl/arm-L4.stl" scale="1 -1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
+<!-- gripper assembly -->
+  <link name="right_wrist">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.107996 0.000521 -0.017765"/>
+      <mass value="0.550582"/>
+      <inertia ixx="0.000476" ixy="-2.9e-05" ixz="0.001403" iyy="0.009564" iyz="-1.5e-05" izz="-9e-06"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.5707 1.5707 " xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.025" length="0.05"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.05 0.05 0.75 0.9"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.5707 1.5707" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.025" length="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_wrist_joint" type="revolute">
+    <origin rpy="-1.57079632679 0.1926991 0" xyz="0.38 -0.0 -0.06"/>
+    <parent link="right_elbow"/>
+    <child link="right_wrist"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="0" lower="-1.57" upper="1.57" velocity="10"/>
+  </joint>
+
+  <link name="gripper_r_base">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.2"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.5707 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/base.stl"/>
+      </geometry>
+      <material name="Light_Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 1.5707 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/coarse/base.stl"/>
+      </geometry>
+      <material name="Light_Grey"/>
+    </collision>
+  </link>
+
+  <joint name="gripper_right_wrist_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0.02 0 0"/>
+    <parent link="right_wrist"/>
+    <child link="gripper_r_base"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="0" lower="-1.57" upper="1.57" velocity="10"/>
+  </joint>
+
+  <link name="right_gripper_ee"/>
+  <joint name="right_ee_to_gripper_base" type="fixed">
+    <origin rpy="0 0 0" xyz="0.09 0.0 0.0"/>
+    <parent link="gripper_r_base"/>
+    <child link="right_gripper_ee"/>
+  </joint>
+
+  <joint name="gripper_r_joint" type="prismatic">
+    <parent link="right_gripper_ee"/>
+    <child link="gripper_r_finger_r"/>
+    <origin rpy="0 1.57 0" xyz="0.0 -0.0065 0.0"/>
+    <axis xyz="-1 0 0"/>
+    <limit effort="300" lower="0" upper="0.025" velocity="0.02"/>
+    <dynamics damping="0.5"/>
+  </joint>
+  <link name="gripper_r_finger_r">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.01"/>
+      <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/finger.stl"/>
+      </geometry>
+      <material name="scarlet"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/coarse/finger.stl"/>
+      </geometry>
+      <material name="Grey"/>
+    </collision>
+  </link>
+
+  <joint name="gripper_r_joint_m" type="prismatic">
+      <parent link="right_gripper_ee"/>
+      <child link="gripper_r_finger_l"/>
+      <origin rpy="0 -1.57 3.14159265359" xyz="0.0 0.0065 0.0"/>
+      <axis xyz="-1 0 0"/>
+      <limit effort="300" lower="0" upper="0.025" velocity="0.02"/>
+      <dynamics damping="0.5"/>
+      <mimic joint="gripper_r_joint"/>
+    </joint>
+    <link name="gripper_r_finger_l">
+      <inertial>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <mass value="0.01"/>
+        <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
+      </inertial>
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/finger.stl"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/coarse/finger.stl"/>
+        </geometry>
+        <material name="Grey"/>
+      </collision>
+    </link>
+
+    <!-- left gripper -->
+    <link name="left_wrist">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.107996 0.000521 -0.017765"/>
+      <mass value="0.550582"/>
+      <inertia ixx="0.000476" ixy="-2.9e-05" ixz="0.001403" iyy="0.009564" iyz="-1.5e-05" izz="-9e-06"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.5707 1.5707 " xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.025" length="0.05"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.05 0.05 0.75 0.9"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 1.5707 1.5707" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.025" length="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_wrist_joint" type="revolute">
+    <origin rpy="-1.57079632679 0.1926991 0" xyz="0.38 -0.0 -0.06"/>
+    <parent link="left_elbow"/>
+    <child link="left_wrist"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="0" lower="-1.57" upper="1.57" velocity="10"/>
+  </joint>
+
+  <link name="gripper_l_base">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.2"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 1.5707 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/base.stl"/>
+      </geometry>
+      <material name="Light_Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 1.5707 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/coarse/base.stl"/>
+      </geometry>
+      <material name="Light_Grey"/>
+    </collision>
+  </link>
+
+  <joint name="gripper_left_wrist_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0.02 0 0"/>
+    <parent link="left_wrist"/>
+    <child link="gripper_l_base"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="0" lower="-1.57" upper="1.57" velocity="10"/>
+  </joint>
+
+  <link name="left_gripper_ee"/>
+  <joint name="left_ee_to_gripper_base" type="fixed">
+    <origin rpy="0 0 0" xyz="0.09 0.0 0.0"/>
+    <parent link="gripper_l_base"/>
+    <child link="left_gripper_ee"/>
+  </joint>
+
+  <joint name="gripper_l_joint" type="prismatic">
+    <parent link="left_gripper_ee"/>
+    <child link="gripper_l_finger_r"/>
+    <origin rpy="0 1.57 0" xyz="0.0 -0.0065 0.0"/>
+    <axis xyz="-1 0 0"/>
+    <limit effort="300" lower="0" upper="0.025" velocity="0.02"/>
+    <dynamics damping="0.5"/>
+  </joint>
+  <link name="gripper_l_finger_r">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.01"/>
+      <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/finger.stl"/>
+      </geometry>
+      <material name="scarlet"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/coarse/finger.stl"/>
+      </geometry>
+      <material name="Grey"/>
+    </collision>
+  </link>
+
+  <joint name="gripper_l_joint_m" type="prismatic">
+      <parent link="left_gripper_ee"/>
+      <child link="gripper_l_finger_l"/>
+      <origin rpy="0 -1.57 3.14159265359" xyz="0.0 0.0065 0.0"/>
+      <axis xyz="-1 0 0"/>
+      <limit effort="300" lower="0" upper="0.025" velocity="0.02"/>
+      <dynamics damping="0.5"/>
+      <mimic joint="gripper_l_joint"/>
+    </joint>
+    <link name="gripper_l_finger_l">
+      <inertial>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <mass value="0.01"/>
+        <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
+      </inertial>
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/finger.stl"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="/home/bill/garage/kfp_v2/morpheus/models/yumi_description/meshes/gripper/coarse/finger.stl"/>
+        </geometry>
+        <material name="Grey"/>
+      </collision>
+    </link>
+
+  
+    
+  <joint name="hip_abduction_left" type="continuous">
+    <origin rpy="1.57079632679 -1.57079632679 -1.57079632679" xyz="-0.001 0.091 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="torso"/>
+    <child link="left_hip_roll"/>
+    <limit effort="1.4" lower="-1.0472" upper="1.0472" velocity="12.15"/>
+  </joint>
+  <joint name="hip_rotation_left" type="continuous">
+    <origin rpy="0 -1.57079632679 0" xyz="-0.0505 0 0.044"/>
+    <axis xyz="0 0 1"/>
+    <parent link="left_hip_roll"/>
+    <child link="left_hip_yaw"/>
+    <limit effort="1.4" lower="-0.698132" upper="0.698132" velocity="12.15"/>
+  </joint>
+  <joint name="hip_flexion_left" type="continuous">
+    <origin rpy="-1.57079632679 -0.785398163397 3.14159265359" xyz="0 0.004 0.068"/>
+    <axis xyz="0 0 -1"/>
+    <parent link="left_hip_yaw"/>
+    <child link="left_hip_pitch"/>
+    <limit effort="12.5" lower="-1.0472" upper="1.57079632679" velocity="8.5"/>
+  </joint>
+  <joint name="knee_joint_left" type="continuous">
+    <origin rpy="0 0 -1.17079632679" xyz="0.12 0 0.0045"/>
+    <axis xyz="0 0 1"/>
+    <parent link="left_hip_pitch"/>
+    <child link="left_knee"/>
+    <limit effort="12.5" lower="-1.2392" upper="0.8727" velocity="8.5085"/>
+  </joint>
+  <joint name="knee_to_shin_left" type="continuous">
+    <origin rpy="0 0 0" xyz="0.060677 0.047406 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="left_knee"/>
+    <child link="left_shin"/>
+    <limit effort="0" lower="-0.35" upper="0.35" velocity="10"/>
+  </joint>
+  <joint name="shin_to_tarsus_left" type="continuous">
+    <origin rpy="0 0 1.7976891" xyz="0.434759 0.02 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="left_shin"/>
+    <child link="left_tarsus"/>
+    <limit effort="0" lower="-0.8779" upper="1.2497" velocity="20"/>
+  </joint>
+  <joint name="toe_pitch_joint_left" type="continuous">
+    <origin rpy="0 0 0.7" xyz="0.408 -0.04 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="left_tarsus"/>
+    <child link="left_toe_pitch"/>
+    <limit effort="0.9" lower="-0.785398163397" upper="0.785398163397" velocity="11.5"/>
+  </joint>
+  <joint name="toe_roll_joint_left" type="continuous">
+    <origin rpy="0 1.57079632679 0" xyz="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="left_toe_pitch"/>
+    <child link="left_toe_roll"/>
+    <limit effort="0.9" lower="-0.6109" upper="0.6109" velocity="11.5"/>
+  </joint>
+  <joint name="shoulder_roll_joint_left" type="continuous">
+    <origin rpy="-1.57079632679 -1.3962633 1.57079632679" xyz="-0.001 0.12 0.4"/>
+    <axis xyz="0 0 1"/>
+    <parent link="torso"/>
+    <child link="left_shoulder_roll"/>
+    <limit effort="1.4" lower="-1.309" upper="1.309" velocity="12.5"/>
+  </joint>
+  <joint name="shoulder_pitch_joint_left" type="continuous">
+    <origin rpy="1.57079632679 0.785398163397 -0.2792527" xyz="-0.00317 -0.011055 0.0555"/>
+    <axis xyz="0 0 -1"/>
+    <parent link="left_shoulder_roll"/>
+    <child link="left_shoulder_pitch"/>
+    <limit effort="1.4" lower="-3.1415" upper="3.1415" velocity="12.5"/>
+  </joint>
+  <joint name="shoulder_yaw_joint_left" type="continuous">
+    <origin rpy="1.57079632679 0 0" xyz="0 -0.165 -0.1"/>
+    <axis xyz="0 0 1"/>
+    <parent link="left_shoulder_pitch"/>
+    <child link="left_shoulder_yaw"/>
+    <limit effort="1.4" lower="-1.7453" upper="1.7453" velocity="10"/>
+  </joint>
+  <joint name="elbow_joint_left" type="continuous">
+    <origin rpy="1.57079632679 -0.3926991 0" xyz="0 -0.0385 0.185"/>
+    <axis xyz="0 0 1"/>
+    <parent link="left_shoulder_yaw"/>
+    <child link="left_elbow"/>
+    <limit effort="1.4" lower="-1.3526" upper="1.3526" velocity="12.5"/>
+  </joint>
+  
+
+  <joint name="hip_abduction_right" type="continuous">
+    <origin rpy="-1.57079632679 -1.57079632679 1.57079632679" xyz="-0.001 -0.091 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="torso"/>
+    <child link="right_hip_roll"/>
+    <limit effort="1.4" lower="-1.0472" upper="1.0472" velocity="12.15"/>
+  </joint>
+  <joint name="hip_rotation_right" type="continuous">
+    <origin rpy="0 -1.57079632679 0" xyz="-0.0505 0 0.044"/>
+    <axis xyz="0 0 1"/>
+    <parent link="right_hip_roll"/>
+    <child link="right_hip_yaw"/>
+    <limit effort="1.4" lower="-0.698132" upper="0.698132" velocity="12.15"/>
+  </joint>
+  <joint name="hip_flexion_right" type="continuous">
+    <origin rpy="1.57079632679 -0.785398163397 -3.14159265359" xyz="0 -0.004 0.068"/>
+    <axis xyz="0 0 -1"/>
+    <parent link="right_hip_yaw"/>
+    <child link="right_hip_pitch"/>
+    <limit effort="12.5" lower="-1.57079632679" upper="1.0472" velocity="8.5"/>
+  </joint>
+  <joint name="knee_joint_right" type="continuous">
+    <origin rpy="0 0 1.17079632679" xyz="0.12 0 0.0045"/>
+    <axis xyz="0 0 1"/>
+    <parent link="right_hip_pitch"/>
+    <child link="right_knee"/>
+    <limit effort="12.5" lower="-0.8727" upper="1.2392" velocity="8.5085"/>
+  </joint>
+  <joint name="knee_to_shin_right" type="continuous">
+    <origin rpy="0 0 0" xyz="0.060677 -0.047406 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="right_knee"/>
+    <child link="right_shin"/>
+    <limit effort="0" lower="-0.35" upper="0.35" velocity="10"/>
+  </joint>
+  <joint name="shin_to_tarsus_right" type="continuous">
+    <origin rpy="0 0 -1.7976891" xyz="0.434759 -0.02 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="right_shin"/>
+    <child link="right_tarsus"/>
+    <limit effort="0" lower="-1.2497" upper="0.8779" velocity="20"/>
+  </joint>
+  <joint name="toe_pitch_joint_right" type="continuous">
+    <origin rpy="0 0 -0.7" xyz="0.408 0.04 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="right_tarsus"/>
+    <child link="right_toe_pitch"/>
+    <limit effort="0.9" lower="-0.785398163397" upper="0.785398163397" velocity="11.5"/>
+  </joint>
+  <joint name="toe_roll_joint_right" type="continuous">
+    <origin rpy="0 1.57079632679 0" xyz="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="right_toe_pitch"/>
+    <child link="right_toe_roll"/>
+    <limit effort="0.9" lower="-0.6109" upper="0.6109" velocity="11.5"/>
+  </joint>
+  <joint name="shoulder_roll_joint_right" type="continuous">
+    <origin rpy="1.57079632679 -1.3962633 -1.57079632679" xyz="-0.001 -0.12 0.4"/>
+    <axis xyz="0 0 1"/>
+    <parent link="torso"/>
+    <child link="right_shoulder_roll"/>
+    <limit effort="1.4" lower="-1.309" upper="1.309" velocity="12.5"/>
+  </joint>
+  <joint name="shoulder_pitch_joint_right" type="continuous">
+    <origin rpy="-1.57079632679 0.785398163397 0.2792527" xyz="-0.00317 0.011055 0.0555"/>
+    <axis xyz="0 0 -1"/>
+    <parent link="right_shoulder_roll"/>
+    <child link="right_shoulder_pitch"/>
+    <limit effort="1.4" lower="-3.1415" upper="3.1415" velocity="12.5"/>
+  </joint>
+  <joint name="shoulder_yaw_joint_right" type="continuous">
+    <origin rpy="-1.57079632679 0 0" xyz="0 0.165 -0.1"/>
+    <axis xyz="0 0 1"/>
+    <parent link="right_shoulder_pitch"/>
+    <child link="right_shoulder_yaw"/>
+    <limit effort="1.4" lower="-1.7453" upper="1.7453" velocity="10"/>
+  </joint>
+  <joint name="elbow_joint_right" type="continuous">
+    <origin rpy="-1.57079632679 -0.3926991 0" xyz="0 0.0385 0.185"/>
+    <axis xyz="0 0 1"/>
+    <parent link="right_shoulder_yaw"/>
+    <child link="right_elbow"/>
+    <limit effort="1.4" lower="-1.3526" upper="1.3526" velocity="12.5"/>
+  </joint>
+
+
+<!-- joint to freight base -->
+<joint name="digit_to_freight" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0  0.7"/>
+    <parent link="base_link"/>
+    <child link="torso"/>
+</joint>
+
+
+<link name="footprint"/>
+<joint name="footprint_to_base" type="fixed">
+  <parent link="footprint"/>
+  <child link="base_link"/>
+</joint>
+
+
+
+<link name="base_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/base_link.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="Black"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.12498"/>
+      <geometry>
+        <!-- Make collision box slightly bigger in x and z directions. -->
+        <box size="1.0074 0.5709 0.2675"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="33.455"/>
+      <origin xyz="-0.08748 -0.00085 0.09947"/>
+      <inertia ixx="0.6022" ixy="-0.02364" ixz="-0.1197" iyy="1.7386" iyz="-0.001544" izz="2.0296"/>
+    </inertial>
+  </link>
+  <gazebo reference="base_link">
+    </gazebo>
+  <!-- IMU Link is the standard mounting position for the UM6 IMU.-->
+  <!-- Can be modified with environment variables in /etc/ros/setup.bash -->
+  <link name="imu_link"/>
+  <joint name="imu_joint" type="fixed">
+    <origin rpy="$(optenv HUSKY_IMU_RPY 0 -1.5708 3.1416)" xyz="$(optenv HUSKY_IMU_XYZ 0.19 0 0.149)"/>
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+  </joint>
+  <gazebo reference="imu_link">
+    </gazebo>
+  <!-- Husky wheel macros -->
+  <link name="front_left_wheel_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <stiffness value="30000"/>
+      <damping value="1000"/>
+    </contact>
+    
+    <inertial>
+      <mass value="2.637"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.02467" ixy="0" ixz="0" iyy="0.02467" iyz="0" izz="0.04411"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/wheel.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="1.570795 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1143" radius="0.17775"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="front_left_wheel_link">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <joint name="front_left_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_left_wheel_link"/>
+    <origin rpy="0 0 0" xyz="0.256 0.2854 0.03282"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+  </joint>
+  <transmission name="front_left_wheel_trans" type="SimpleTransmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="front_left_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="front_left_wheel">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link name="front_right_wheel_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <stiffness value="30000"/>
+      <damping value="1000"/>
+    </contact>
+    
+    <inertial>
+      <mass value="2.637"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.02467" ixy="0" ixz="0" iyy="0.02467" iyz="0" izz="0.04411"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/wheel.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="1.570795 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1143" radius="0.17775"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="front_right_wheel_link">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <joint name="front_right_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_right_wheel_link"/>
+    <origin rpy="0 0 0" xyz="0.256 -0.2854 0.03282"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+  </joint>
+  <transmission name="front_right_wheel_trans" type="SimpleTransmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="front_right_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="front_right_wheel">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link name="rear_left_wheel_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <stiffness value="30000"/>
+      <damping value="1000"/>
+    </contact>
+    
+    <inertial>
+      <mass value="2.637"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.02467" ixy="0" ixz="0" iyy="0.02467" iyz="0" izz="0.04411"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/wheel.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="1.570795 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1143" radius="0.17775"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="rear_left_wheel_link">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <joint name="rear_left_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear_left_wheel_link"/>
+    <origin rpy="0 0 0" xyz="-0.256 0.2854 0.03282"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+  </joint>
+  <transmission name="rear_left_wheel_trans" type="SimpleTransmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="rear_left_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="rear_left_wheel">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link name="rear_right_wheel_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <stiffness value="30000"/>
+      <damping value="1000"/>
+    </contact>
+    
+    <inertial>
+      <mass value="2.637"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.02467" ixy="0" ixz="0" iyy="0.02467" iyz="0" izz="0.04411"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/wheel.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="1.570795 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1143" radius="0.17775"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="rear_right_wheel_link">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <joint name="rear_right_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="rear_right_wheel_link"/>
+    <origin rpy="0 0 0" xyz="-0.256 -0.2854 0.03282"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+  </joint>
+  <transmission name="rear_right_wheel_trans" type="SimpleTransmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="rear_right_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="rear_right_wheel">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <link name="top_plate_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="meshes/top_plate.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="Yellow"/>
+    </visual>
+  </link>
+  <joint name="top_plate" type="fixed">
+    <parent link="base_link"/>
+    <child link="top_plate_link"/>
+  </joint>
+  <gazebo reference="top_plate_link">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+  <link name="user_rail_link">
+    <visual>
+      <geometry>
+        <!-- <mesh filename="meshes/user_rail.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+  </link>
+  <joint name="user_rail" type="fixed">
+    <origin rpy="0 0 0" xyz="0.272 0 0.245"/>
+    <parent link="base_link"/>
+    <child link="user_rail_link"/>
+  </joint>
+  <gazebo reference="user_rail_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  <link name="front_bumper_link">
+    <visual>
+      <geometry>
+        <!-- <mesh filename="meshes/bumper.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+  </link>
+  <joint name="front_bumper" type="fixed">
+    <origin rpy="0 0 0" xyz="0.48 0 0.091"/>
+    <parent link="base_link"/>
+    <child link="front_bumper_link"/>
+  </joint>
+  <gazebo reference="front_bumper_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  <link name="rear_bumper_link">
+    <visual>
+      <geometry>
+        <!-- <mesh filename="meshes/bumper.stl"/> -->
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="DarkGrey"/>
+    </visual>
+  </link>
+  <joint name="rear_bumper" type="fixed">
+    <origin rpy="0 0 3.14159" xyz="-0.48 0 0.091"/>
+    <parent link="base_link"/>
+    <child link="rear_bumper_link"/>
+  </joint>
+  <gazebo reference="rear_bumper_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+
+
+
+
+
+</robot>

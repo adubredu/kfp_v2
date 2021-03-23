@@ -1,0 +1,107 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <world name='grocery_world'>
+  <model name='can_pepsi'>
+    <link name='link_0'>
+         <visual name='visual'>
+        <pose frame=''>0 0 0 1.57 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>pepsi.obj</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+             <material>
+              <color rgba="1 1 1 1"/>
+       <!-- <script>
+            <uri>materials/scripts</uri>
+            <uri>materials/textures</uri>
+            <name>pepsi</name>
+          </script> -->
+        </material>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>pepsi.obj</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+       </collision>
+
+       <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>0.00056</mass>
+          <inertia>
+            <ixx>0.004878</ixx>
+            <ixy>-6.2341e-07</ixy>
+            <ixz>-7.4538e-07</ixz>
+            <iyy>0.00090164</iyy>
+            <iyz>-0.00014394</iyz>
+            <izz>0.0042946</izz>
+          </inertia>
+    </inertial>
+       
+    </link>
+    <link name='link_1'>
+        <visual name='visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/metal.dae</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+        <material>
+          <lighting>1</lighting>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+                <ambient>0.666 0.666 0.666 1</ambient>
+          <diffuse>0.666 0.666 0.666 1</diffuse>
+          <specular>0.01 0.01 0.01 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+        <cast_shadows>1</cast_shadows>
+        <transparency>0</transparency>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/metal.dae</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>0.56</mass>
+          <inertia>
+            <ixx>0.004878</ixx>
+            <ixy>-6.2341e-07</ixy>
+            <ixz>-7.4538e-07</ixz>
+            <iyy>0.00090164</iyy>
+            <iyz>-0.00014394</iyz>
+            <izz>0.0042946</izz>
+          </inertia>
+    </inertial>
+    </link>
+
+    <joint name="joint" type="fixed">
+      <parent>link_0</parent>
+      <child>link_1</child>
+    </joint>
+
+
+    <static>1</static>
+    <allow_auto_disable>1</allow_auto_disable>
+  </model>
+</world>
+</sdf>

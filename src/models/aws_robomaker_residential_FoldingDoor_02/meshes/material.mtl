@@ -1,0 +1,15 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v5.0.639693989)
+
+newmtl Material #25
+Kd 1 1 1
+Ka 0.588 0.588 0.588
+Ks 0 0 0
+Ke 0 0 0
+Tf 1 1 1
+d 1
+Ni 1
+Ns 2
+illum 2
+map_Kd ../materials/textures/aws_FoldingDoor_02.png
+
