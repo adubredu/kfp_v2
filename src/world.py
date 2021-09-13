@@ -9,7 +9,7 @@ from pybullet_utils import gazebo_world_parser
 
 
 
-class Grocery_World:
+class Grocery_World_old:
     def __init__(self,seed=0):
         np.random.seed(seed)
         model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir)
@@ -64,6 +64,74 @@ class Grocery_World:
 
 
     def get_id(self, itemname):
+        mesh_name = self.mesh_name[itemname]
+        iden = self.ob_idx[mesh_name]
+        return iden
+
+    def get_name(self, obid):
+        return self.real_name[self.idx_obs[obid]]
+
+    def get_names_of_ids(self, ids):
+        idx = []
+        for idd in ids:
+            idx.append(self.real_name[self.idx_obs[idd]])
+        return idx
+
+
+class Grocery_World: #For video
+    def __init__(self,seed=0):
+        np.random.seed(seed)
+        model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir)
+        p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)          
+        p.setAdditionalSearchPath(model_path+'/digit/models')
+        self.item_names=['YcbStrawberry','YcbPottedMeatCan', 'YcbGelatinBox', 'YcbMasterChefCan', 'YcbPear', 'YcbTomatoSoupCan', 'YcbTennisBall', 'YcbScissors']#,'YcbPowerDrill',  'YcbMustardBottle'] 
+        p.setGravity(0, 0, -9.81)
+        self.xrange = (0.71, 0.73)
+        self.yrange = (-0.45, -0.15)
+        self.base_limits = ((-22.5, -22.5), (22.5, 22.5))
+        self.pick_base_pose = [0.2,-0.25,0]
+        self.place_base_pose = [0.2,0.25,0]
+        self.init_item_properties()
+        
+        with pyplan.HideOutput(enable=True):
+            self.floor = p.loadURDF('floor/black_floor.urdf',useFixedBase=True) 
+            self.table = p.loadURDF('table/table.urdf',[1.0,0,0], p.getQuaternionFromEuler([0,0,1.57]), useFixedBase=True) 
+            self.bag = p.loadURDF('bag/bag.urdf',[0.8,0.25,0.88], p.getQuaternionFromEuler([0,0,1.57]), useFixedBase=True)
+            self.load_objects()
+
+        
+            
+    def init_item_properties(self):
+        self.real_name = {'YcbStrawberry':'strawberry','YcbPottedMeatCan':'meat_can', 'YcbGelatinBox':'gelatin_box', 'YcbMasterChefCan':'masterchef_can', 'YcbPear':'pear' , 'YcbMustardBottle':'mustard', 'YcbTomatoSoupCan':'soup_can', 'YcbTennisBall':'tennis_ball', 'YcbPowerDrill':'drill', 'YcbScissors':'scissors'}
+        self.masses = {'strawberry':'light','meat_can':'heavy', 'gelatin_box':'light', 'masterchef_can':'heavy', 'pear':'light' , 'mustard':'heavy', 'soup_can':'light', 'tennis_ball':'light', 'drill':'heavy', 'scissors':'light'}
+        self.mesh_name = dict([(value, key) for key, value in self.real_name.items()]) 
+            
+    def load_objects(self, arr_id=1):
+        flags = p.URDF_USE_INERTIA_FROM_FILE
+        self.ob_idx = {} 
+
+        for item in self.item_names:
+            x = np.random.uniform(self.xrange[0], self.xrange[1])
+            y = np.random.uniform(self.yrange[0], self.yrange[1])
+            self.ob_idx[item] = p.loadURDF(os.path.join(ycb_objects.getDataPath(), item, 'model.urdf'), [x,y,0.92], flags=flags)
+        
+        print(self.ob_idx)
+        self.idx_obs = dict([(value, key) for key, value in self.ob_idx.items()]) 
+        print(self.idx_obs)
+
+
+    def get_random_table_space(self):
+        x = np.random.uniform(self.xrange[0], self.xrange[1])
+        y = np.random.uniform(self.yrange[0], self.yrange[1])
+        z = 1.0
+        return [x,y,z]
+
+
+    def get_item_mass(self, itemname): 
+        return self.masses[itemname]
+
+
+    def get_id(self, itemname): 
         mesh_name = self.mesh_name[itemname]
         iden = self.ob_idx[mesh_name]
         return iden
@@ -203,7 +271,8 @@ class Grocery_Bag:
         b = 0.2
         x, y, _ = pyplan.get_point(bagid)
         self.index = 0
-        denom = 10
+        # denom = 10
+        denom = 5
         self.positions = [(x+b/denom, y+w/denom), (x+b/denom, y-w/denom), (x-b/denom, y+w/denom), (x-b/denom,y-w/denom)]
         self.radius = 0.00625
         self.z = 0.97
@@ -243,6 +312,8 @@ class Grocery_Bag:
     def remove_item(self, itemid):
         if itemid in self.items_added:
             index = self.items_added[itemid]
+            if index == 99:
+                return
             self.occupancy[index] = 0
             self.items_added.pop(itemid)
             self.num_base_items -=1

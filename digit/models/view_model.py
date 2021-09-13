@@ -19,7 +19,7 @@ p.setAdditionalSearchPath('.')
 # p.loadURDF('floor/floor.urdf') 
 # base = p.loadURDF('buff_digit/prost_digit_hover.urdf',[0,0,0], useFixedBase=True)
 # base = p.loadURDF('nice_kitchen/nice_kitchen.urdf', [0,0,0],p.getQuaternionFromEuler([-1.57,3.1415,0]), useFixedBase=True,flags=p.URDF_USE_MATERIAL_COLORS_FROM_MTL) 
-base = p.loadURDF('table/table.urdf', [0,0,0], useFixedBase=True ) 
+base = p.loadURDF('buff_digit/right_prosthetic.urdf', [0,0,0], useFixedBase=True ) 
 
 # base = p.loadSDF('bottle_beer/model.sdf')
 # time.sleep(100000)

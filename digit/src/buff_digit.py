@@ -370,6 +370,8 @@ class Buff_digit:
         ob_pose = pyplan.get_point(object_id)
         height = self.get_height(object_id)
         ob_point = list(ee_pose[0]); ob_point[2] = ob_pose[2] 
+        if pyplan.get_name(object_id) == 'YcbPottedMeatCan' or pyplan.get_name(object_id) == 'YcbGelatinBox':
+            ob_point[2]-=0.05
         pyplan.set_point(object_id, ob_point)
         self.hold(object_id, armname) 
         grasp_position[2] += 0.2
